@@ -46,7 +46,7 @@ public sealed class EfModelRepository : IModelRepository
 
         if (!string.IsNullOrWhiteSpace(query))
         {
-            q = q.Where(x => x.Title.Contains(query) || x.Description.Contains(query));
+            q = q.Where(x => x.Title.Contains(query) ||  x.Description.Contains(query));
         }
 
         return await q.ToListAsync(ct);

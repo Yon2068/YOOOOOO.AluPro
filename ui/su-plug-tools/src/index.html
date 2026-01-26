@@ -1,0 +1,1318 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YOOOOO 铝型材专业工具</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #e6e6e6;
+            height: 100vh;
+            display: flex;
+            overflow: hidden;
+        }
+
+        /* 左侧导航栏 */
+        .sidebar {
+            width: 80px;
+            background-color: rgba(0, 0, 0, 0.3);
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            flex-direction: column;
+            padding: 20px 0;
+            align-items: center;
+        }
+
+        .logo {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #00b4d8, #0077b6);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 18px;
+            margin-bottom: 30px;
+            color: white;
+            box-shadow: 0 4px 12px rgba(0, 180, 216, 0.3);
+        }
+
+        .nav-item {
+            width: 60px;
+            height: 60px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 8px 0;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: #aaa;
+        }
+
+        .nav-item:hover {
+            background-color: rgba(255, 255, 255, 0.05);
+            color: #ddd;
+        }
+
+        .nav-item.active {
+            background-color: rgba(0, 180, 216, 0.2);
+            color: #00b4d8;
+            box-shadow: 0 0 15px rgba(0, 180, 216, 0.2);
+        }
+
+        .nav-icon {
+            font-size: 20px;
+            margin-bottom: 5px;
+        }
+
+        .nav-label {
+            font-size: 11px;
+            text-align: center;
+        }
+
+        /* 主内容区域 */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* 顶部标题栏 */
+        .header {
+            padding: 18px 25px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            background-color: rgba(0, 0, 0, 0.2);
+        }
+
+        .header h1 {
+            font-size: 22px;
+            font-weight: 600;
+            background: linear-gradient(to right, #00b4d8, #90e0ef);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 5px;
+        }
+
+        .header .subtitle {
+            font-size: 13px;
+            color: #aaa;
+        }
+
+        .header .subtitle strong {
+            color: #90e0ef;
+        }
+
+        /* 功能内容区域 */
+        .content-area {
+            flex: 1;
+            display: flex;
+            overflow: hidden;
+        }
+
+        /* 功能面板 */
+        .function-panel {
+            flex: 1;
+            padding: 25px;
+            overflow-y: auto;
+        }
+
+        .function-title {
+            font-size: 18px;
+            margin-bottom: 20px;
+            color: #fff;
+            padding-bottom: 10px;
+            border-bottom: 2px solid rgba(0, 180, 216, 0.5);
+        }
+
+        /* 通用控件样式 */
+        .control-group {
+            margin-bottom: 25px;
+        }
+
+        .control-label {
+            display: block;
+            margin-bottom: 8px;
+            color: #ccc;
+            font-size: 14px;
+        }
+
+        .control-row {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+        select, input[type="text"], input[type="number"] {
+            background-color: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 6px;
+            color: #fff;
+            padding: 10px 15px;
+            font-size: 14px;
+            min-width: 180px;
+            transition: all 0.3s;
+        }
+
+        select:focus, input[type="text"]:focus, input[type="number"]:focus {
+            outline: none;
+            border-color: #00b4d8;
+            box-shadow: 0 0 0 2px rgba(0, 180, 216, 0.2);
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #00b4d8, #0077b6);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0, 180, 216, 0.4);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: #ddd;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 6px 15px rgba(255, 255, 255, 0.1);
+        }
+
+        .btn-icon {
+            font-size: 16px;
+        }
+
+        /* 铝型材规格卡片 */
+        .profile-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .profile-card {
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            padding: 15px 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 1px solid transparent;
+        }
+
+        .profile-card:hover {
+            background-color: rgba(0, 180, 216, 0.1);
+            border-color: rgba(0, 180, 216, 0.3);
+        }
+
+        .profile-card.active {
+            background-color: rgba(0, 180, 216, 0.2);
+            border-color: #00b4d8;
+            box-shadow: 0 0 12px rgba(0, 180, 216, 0.3);
+        }
+
+        .profile-size {
+            font-size: 18px;
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 5px;
+        }
+
+        .profile-desc {
+            font-size: 11px;
+            color: #aaa;
+        }
+
+        /* 方向控制 */
+        .direction-controls {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            max-width: 300px;
+        }
+
+        .dir-btn {
+            background-color: rgba(255, 255, 255, 0.07);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 6px;
+            padding: 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .dir-btn:hover {
+            background-color: rgba(0, 180, 216, 0.15);
+        }
+
+        .dir-btn.active {
+            background-color: rgba(0, 180, 216, 0.25);
+            border-color: #00b4d8;
+        }
+
+        .dir-icon {
+            font-size: 18px;
+            margin-bottom: 5px;
+        }
+
+        /* 状态栏 */
+        .status-bar {
+            padding: 12px 25px;
+            background-color: rgba(0, 0, 0, 0.3);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 13px;
+            color: #aaa;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: #4CAF50;
+        }
+
+        .status-dot.ready {
+            background-color: #4CAF50;
+        }
+
+        .status-dot.processing {
+            background-color: #FFC107;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        /* 响应式调整 */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 60px;
+            }
+
+            .nav-item {
+                width: 50px;
+                height: 50px;
+            }
+
+            .function-panel {
+                padding: 15px;
+            }
+
+            .control-row {
+                flex-direction: column;
+            }
+
+            select, input[type="text"], input[type="number"] {
+                min-width: 100%;
+            }
+        }
+
+        /* 隐藏所有面板，只显示活动的 */
+        .function-panel {
+            display: none;
+        }
+
+        .function-panel.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <!-- 左侧导航栏 -->
+    <div class="sidebar">
+        <div class="logo">Y</div>
+
+        <div class="nav-item active" data-function="create">
+            <div class="nav-icon">📐</div>
+            <div class="nav-label">创建</div>
+        </div>
+
+        <div class="nav-item" data-function="align">
+            <div class="nav-icon">↔️</div>
+            <div class="nav-label">对齐</div>
+        </div>
+
+        <div class="nav-item" data-function="move">
+            <div class="nav-icon">✥</div>
+            <div class="nav-label">移动</div>
+        </div>
+
+        <div class="nav-item" data-function="rotate">
+            <div class="nav-icon">↻</div>
+            <div class="nav-label">旋转</div>
+        </div>
+
+        <div class="nav-item" data-function="flip">
+            <div class="nav-icon">⇄</div>
+            <div class="nav-label">翻转</div>
+        </div>
+
+        <div class="nav-item" data-function="stretch">
+            <div class="nav-icon">↔</div>
+            <div class="nav-label">拉伸</div>
+        </div>
+
+        <div class="nav-item" data-function="hole">
+            <div class="nav-icon">⚫</div>
+            <div class="nav-label">开孔</div>
+        </div>
+
+        <div class="nav-item" data-function="corner">
+            <div class="nav-icon">⎔</div>
+            <div class="nav-label">角码</div>
+        </div>
+    </div>
+
+    <!-- 主内容区域 -->
+    <div class="main-content">
+        <!-- 顶部标题栏 -->
+        <div class="header">
+            <h1>YOOOOO 铝型材专业工具</h1>
+            <div class="subtitle">工业铝型材设计系统 · <strong>欧标系列</strong> · 版本 1.0</div>
+        </div>
+
+        <!-- 功能内容区域 -->
+        <div class="content-area">
+            <!-- 创建铝型材面板 -->
+            <div class="function-panel active" id="create-panel">
+                <h2 class="function-title">创建欧标铝型材</h2>
+
+                <div class="control-group">
+                    <div class="control-label">选择规格</div>
+                    <div class="profile-grid">
+                        <div class="profile-card active" data-size="2020">
+                            <div class="profile-size">2020</div>
+                            <div class="profile-desc">20×20mm</div>
+                        </div>
+                        <div class="profile-card" data-size="2040">
+                            <div class="profile-size">2040</div>
+                            <div class="profile-desc">20×40mm</div>
+                        </div>
+                        <div class="profile-card" data-size="2060">
+                            <div class="profile-size">2060</div>
+                            <div class="profile-desc">20×60mm</div>
+                        </div>
+                        <div class="profile-card" data-size="3030">
+                            <div class="profile-size">3030</div>
+                            <div class="profile-desc">30×30mm</div>
+                        </div>
+                        <div class="profile-card" data-size="3060">
+                            <div class="profile-size">3060</div>
+                            <div class="profile-desc">30×60mm</div>
+                        </div>
+                        <div class="profile-card" data-size="3090">
+                            <div class="profile-size">3090</div>
+                            <div class="profile-desc">30×90mm</div>
+                        </div>
+                        <div class="profile-card" data-size="4040">
+                            <div class="profile-size">4040</div>
+                            <div class="profile-desc">40×40mm</div>
+                        </div>
+                        <div class="profile-card" data-size="4080">
+                            <div class="profile-size">4080</div>
+                            <div class="profile-desc">40×80mm</div>
+                        </div>
+                        <div class="profile-card" data-size="40120">
+                            <div class="profile-size">40120</div>
+                            <div class="profile-desc">40×120mm</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <div class="control-label">长度设置</div>
+                    <div class="control-row">
+                        <input type="number" id="length" value="1000" min="10" max="10000" step="10">
+                        <select id="length-unit">
+                            <option value="mm">毫米 (mm)</option>
+                            <option value="cm">厘米 (cm)</option>
+                            <option value="m" selected>米 (m)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <div class="control-label">创建选项</div>
+                    <div class="control-row">
+                        <button class="btn" id="create-btn" onclick="createProfile()">
+                            <span class="btn-icon">➕</span> 创建铝型材
+                        </button>
+                        <button class="btn btn-secondary" onclick="showHelp('create')">
+                            <span class="btn-icon">❓</span> 帮助
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 对齐铝型材面板 -->
+            <div class="function-panel" id="align-panel">
+                <h2 class="function-title">对齐铝型材</h2>
+
+                <div class="control-group">
+                    <div class="control-label">选择对齐方式</div>
+                    <div class="direction-controls">
+                        <div class="dir-btn" data-align="left">
+                            <div class="dir-icon">←</div>
+                            <div>左对齐</div>
+                        </div>
+                        <div class="dir-btn" data-align="center-h">
+                            <div class="dir-icon">↔</div>
+                            <div>水平居中</div>
+                        </div>
+                        <div class="dir-btn" data-align="right">
+                            <div class="dir-icon">→</div>
+                            <div>右对齐</div>
+                        </div>
+                        <div class="dir-btn" data-align="top">
+                            <div class="dir-icon">↑</div>
+                            <div>顶部对齐</div>
+                        </div>
+                        <div class="dir-btn active" data-align="center-v">
+                            <div class="dir-icon">↕</div>
+                            <div>垂直居中</div>
+                        </div>
+                        <div class="dir-btn" data-align="bottom">
+                            <div class="dir-icon">↓</div>
+                            <div>底部对齐</div>
+                        </div>
+                        <div class="dir-btn" data-align="distribute-h">
+                            <div class="dir-icon">⇆</div>
+                            <div>水平分布</div>
+                        </div>
+                        <div class="dir-btn" data-align="distribute-v">
+                            <div class="dir-icon">⇅</div>
+                            <div>垂直分布</div>
+                        </div>
+                        <div class="dir-btn" data-align="center-all">
+                            <div class="dir-icon">✥</div>
+                            <div>中心对齐</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <div class="control-label">对齐参考</div>
+                    <div class="control-row">
+                        <select id="align-reference">
+                            <option value="first">第一个选中对象</option>
+                            <option value="last">最后一个选中对象</option>
+                            <option value="bounds" selected>整体边界框</option>
+                            <option value="workplane">工作平面</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <div class="control-label">执行对齐</div>
+                    <div class="control-row">
+                        <button class="btn" onclick="alignProfiles()">
+                            <span class="btn-icon">↔️</span> 执行对齐
+                        </button>
+                        <button class="btn btn-secondary" onclick="showHelp('align')">
+                            <span class="btn-icon">❓</span> 帮助
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 移动铝型材面板 -->
+            <div class="function-panel" id="move-panel">
+                <h2 class="function-title">移动铝型材</h2>
+
+                <div class="control-group">
+                    <div class="control-label">移动距离</div>
+                    <div class="control-row">
+                        <input type="number" id="move-x" placeholder="X 方向" value="0" step="10">
+                        <input type="number" id="move-y" placeholder="Y 方向" value="0" step="10">
+                        <input type="number" id="move-z" placeholder="Z 方向" value="0" step="10">
+                        <select id="move-unit">
+                            <option value="mm">mm</option>
+                            <option value="cm">cm</option>
+                            <option value="m" selected>m</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <div class="control-label">移动方式</div>
+                    <div class="control-row">
+                        <button class="btn btn-secondary" onclick="setMoveRelative()">
+                            <span class="btn-icon">Δ</span> 相对移动
+                        </button>
+                        <button class="btn" onclick="setMoveAbsolute()">
+                            <span class="btn-icon">⌖</span> 绝对移动
+                        </button>
+                        <button class="btn btn-secondary" onclick="pickMovePoint()">
+                            <span class="btn-icon">✚</span> 拾取点
+                        </button>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <div class="control-label">执行移动</div>
+                    <div class="control-row">
+                        <button class="btn" onclick="moveProfiles()">
+                            <span class="btn-icon">✥</span> 移动选中对象
+                        </button>
+                        <button class="btn btn-secondary" onclick="showHelp('move')">
+                            <span class="btn-icon">❓</span> 帮助
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 旋转铝型材面板 -->
+            <div class="function-panel" id="rotate-panel">
+                <h2 class="function-title">旋转铝型材</h2>
+
+                <div class="control-group">
+                    <div class="control-label">旋转轴</div>
+                    <div class="control-row">
+                        <button class="btn btn-secondary" onclick="setRotateAxis('x')">
+                            <span class="btn-icon">X</span> X轴
+                        </button>
+                        <button class="btn btn-secondary" onclick="setRotateAxis('y')">
+                            <span class="btn-icon">Y</span> Y轴
+                        </button>
+                        <button class="btn active" onclick="setRotateAxis('z')">
+                            <span class="btn-icon">Z</span> Z轴
+                        </button>
+                        <button class="btn btn-secondary" onclick="setRotateAxis('custom')">
+                            <span class="btn-icon">✚</span> 自定义轴
+                        </button>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <div class="control-label">旋转角度</div>
+                    <div class="control-row">
+                        <input type="number" id="rotate-angle" value="90" min="-360" max="360" step="15">
+                        <select id="rotate-direction">
+                            <option value="cw">顺时针</option>
+                            <option value="ccw" selected>逆时针</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <div class="control-label">旋转中心</div>
+                    <div class="control-row">
+                        <select id="rotate-center">
+                            <option value="object">对象中心</option>
+                            <option value="selection" selected>选择集中心</option>
+                            <option value="origin">坐标系原点</option>
+                            <option value="custom">自定义点</option>
+                        </select>
+                        <button class="btn btn-secondary" onclick="pickRotateCenter()">
+                            <span class="btn-icon">⌖</span> 拾取中心点
+                        </button>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <div class="control-label">执行旋转</div>
+                    <div class="control-row">
+                        <button class="btn" onclick="rotateProfiles()">
+                            <span class="btn-icon">↻</span> 旋转选中对象
+                        </button>
+                        <button class="btn btn-secondary" onclick="showHelp('rotate')">
+                            <span class="btn-icon">❓</span> 帮助
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 翻转铝型材面板 -->
+            <div class="function-panel" id="flip-panel">
+                <h2 class="function-title">翻转铝型材</h2>
+
+                <div class="control-group">
+                    <div class="control-label">翻转轴</div>
+                    <div class="control-row">
+                        <button class="btn" onclick="flipProfiles('x')">
+                            <span class="btn-icon">⇄ X</span> 沿X轴翻转
+                        </button>
+                        <button class="btn" onclick="flipProfiles('y')">
+                            <span class="btn-icon">⇄ Y</span> 沿Y轴翻转
+                        </button>
+                        <button class="btn" onclick="flipProfiles('z')">
+                            <span class="btn-icon">⇄ Z</span> 沿Z轴翻转
+                        </button>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <div class="control-label">翻转基准</div>
+                    <div class="control-row">
+                        <select id="flip-plane">
+                            <option value="center" selected>中心平面</option>
+                            <option value="workplane">工作平面</option>
+                            <option value="selected">选中平面</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <div class="control-label">翻转选项</div>
+                    <div class="control-row">
+                        <label style="display: flex; align-items: center; gap: 8px;">
+                            <input type="checkbox" id="flip-copy" checked>
+                            <span>创建副本</span>
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 8px;">
+                            <input type="checkbox" id="flip-keep-original">
+                            <span>保留原对象</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <div class="control-label">执行翻转</div>
+                    <div class="control-row">
+                        <button class="btn" onclick="flipProfiles('x')">
+                            <span class="btn-icon">⇄</span> 执行翻转
+                        </button>
+                        <button class="btn btn-secondary" onclick="showHelp('flip')">
+                            <span class="btn-icon">❓</span> 帮助
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 拉伸铝型材面板 -->
+            <div class="function-panel" id="stretch-panel">
+                <h2 class="function-title">拉伸铝型材</h2>
+
+                <div class="control-group">
+                    <div class="control-label">拉伸类型</div>
+                    <div class="control-row">
+                        <button class="btn active" onclick="setStretchType('length')">
+                            <span class="btn-icon">↔</span> 长度拉伸
+                        </button>
+                        <button class="btn btn-secondary" onclick="setStretchType('scale')">
+                            <span class="btn-icon">⤡</span> 比例缩放
+                        </button>
+                        <button class="btn btn-secondary" onclick="setStretchType('taper')">
+                            <span class="btn-icon">▽</span> 锥度拉伸
+                        </button>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <div class="control-label">拉伸参数</div>
+                    <div class="control-row">
+                        <input type="number" id="stretch-length" value="500" min="10" max="5000" step="10">
+                        <select id="stretch-direction">
+                            <option value="positive" selected>正向</option>
+                            <option value="negative">负向</option>
+                            <option value="both">双向</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <div class="control-label">拉伸选项</div>
+                    <div class="control-row">
+                        <label style="display: flex; align-items: center; gap: 8px;">
+                            <input type="checkbox" id="stretch-keep-connections" checked>
+                            <span>保持连接</span>
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 8px;">
+                            <input type="checkbox" id="stretch-proportional">
+                            <span>比例调整</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <div class="control-label">执行拉伸</div>
+                    <div class="control-row">
+                        <button class="btn" onclick="stretchProfiles()">
+                            <span class="btn-icon">↔</span> 拉伸选中对象
+                        </button>
+                        <button class="btn btn-secondary" onclick="showHelp('stretch')">
+                            <span class="btn-icon">❓</span> 帮助
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 快速开孔面板 -->
+            <div class="function-panel" id="hole-panel">
+                <h2 class="function-title">快速开孔</h2>
+
+                <div class="control-group">
+                    <div class="control-label">孔类型</div>
+                    <div class="control-row">
+                        <button class="btn active" onclick="setHoleType('round')">
+                            <span class="btn-icon">○</span> 圆孔
+                        </button>
+                        <button class="btn btn-secondary" onclick="setHoleType('slot')">
+                            <span class="btn-icon">▬</span> 槽孔
+                        </button>
+                        <button class="btn btn-secondary" onclick="setHoleType('square')">
+                            <span class="btn-icon">□</span> 方孔
+                        </button>
+                        <button class="btn btn-secondary" onclick="setHoleType('pattern')">
+                            <span class="btn-icon">⋯</span> 阵列孔
+                        </button>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <div class="control-label">孔参数</div>
+                    <div class="control-row">
+                        <input type="number" id="hole-diameter" value="8" min="2" max="50" step="0.5" placeholder="直径 (mm)">
+                        <input type="number" id="hole-depth" value="10" min="1" max="100" step="1" placeholder="深度 (mm)">
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <div class="control-label">孔位置</div>
+                    <div class="control-row">
+                        <select id="hole-position">
+                            <option value="center" selected>型材中心</option>
+                            <option value="edge">型材边缘</option>
+                            <option value="custom">自定义位置</option>
+                            <option value="pattern">等距阵列</option>
+                        </select>
+                        <button class="btn btn-secondary" onclick="pickHolePosition()">
+                            <span class="btn-icon">⌖</span> 拾取位置
+                        </button>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <div class="control-label">执行开孔</div>
+                    <div class="control-row">
+                        <button class="btn" onclick="createHoles()">
+                            <span class="btn-icon">⚫</span> 创建孔
+                        </button>
+                        <button class="btn btn-secondary" onclick="showHelp('hole')">
+                            <span class="btn-icon">❓</span> 帮助
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 添加角码面板 -->
+            <div class="function-panel" id="corner-panel">
+                <h2 class="function-title">添加角码</h2>
+
+                <div class="control-group">
+                    <div class="control-label">角码类型</div>
+                    <div class="control-row">
+                        <button class="btn active" onclick="setCornerType('standard')">
+                            <span class="btn-icon">⎔</span> 标准角码
+                        </button>
+                        <button class="btn btn-secondary" onclick="setCornerType('strong')">
+                            <span class="btn-icon">⧉</span> 加强角码
+                        </button>
+                        <button class="btn btn-secondary" onclick="setCornerType('internal')">
+                            <span class="btn-icon">⊡</span> 内置角码
+                        </button>
+                        <button class="btn btn-secondary" onclick="setCornerType('adjustable')">
+                            <span class="btn-icon">⤧</span> 可调角码
+                        </button>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <div class="control-label">角码尺寸</div>
+                    <div class="control-row">
+                        <select id="corner-size">
+                            <option value="20" selected>20系列</option>
+                            <option value="30">30系列</option>
+                            <option value="40">40系列</option>
+                            <option value="45">45系列</option>
+                        </select>
+                        <select id="corner-thickness">
+                            <option value="2" selected>2mm厚度</option>
+                            <option value="2.5">2.5mm厚度</option>
+                            <option value="3">3mm厚度</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <div class="control-label">安装选项</div>
+                    <div class="control-row">
+                        <label style="display: flex; align-items: center; gap: 8px;">
+                            <input type="checkbox" id="corner-auto-align" checked>
+                            <span>自动对齐</span>
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 8px;">
+                            <input type="checkbox" id="corner-add-screws" checked>
+                            <span>添加螺丝</span>
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 8px;">
+                            <input type="checkbox" id="corner-flush">
+                            <span>齐平安装</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <div class="control-label">执行添加</div>
+                    <div class="control-row">
+                        <button class="btn" onclick="addCorners()">
+                            <span class="btn-icon">⎔</span> 添加角码
+                        </button>
+                        <button class="btn btn-secondary" onclick="showHelp('corner')">
+                            <span class="btn-icon">❓</span> 帮助
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 状态栏 -->
+        <div class="status-bar">
+            <div class="status-indicator">
+                <div class="status-dot ready"></div>
+                <span>就绪</span>
+            </div>
+            <div id="status-message">YOOOOO 铝型材工具 v1.0 | 选择功能开始操作</div>
+        </div>
+    </div>
+
+    <script>
+        // 当前选中的铝型材规格
+        let selectedProfileSize = '2020';
+
+        // 当前活动功能
+        let activeFunction = 'create';
+
+        // 初始化函数
+        function initialize() {
+            // 设置导航点击事件
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    // 更新活动状态
+                    document.querySelectorAll('.nav-item').forEach(nav => {
+                        nav.classList.remove('active');
+                    });
+                    this.classList.add('active');
+
+                    // 显示对应功能面板
+                    const functionName = this.getAttribute('data-function');
+                    showFunctionPanel(functionName);
+                });
+            });
+
+            // 设置铝型材规格卡片点击事件
+            document.querySelectorAll('.profile-card').forEach(card => {
+                card.addEventListener('click', function() {
+                    document.querySelectorAll('.profile-card').forEach(c => {
+                        c.classList.remove('active');
+                    });
+                    this.classList.add('active');
+                    selectedProfileSize = this.getAttribute('data-size');
+                    updateStatus(`已选择 ${selectedProfileSize} 铝型材`);
+                });
+            });
+
+            // 设置对齐按钮点击事件
+            document.querySelectorAll('.dir-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.dir-btn').forEach(b => {
+                        b.classList.remove('active');
+                    });
+                    this.classList.add('active');
+                });
+            });
+
+            updateStatus('YOOOOO 铝型材工具已就绪');
+        }
+
+        // 显示对应功能面板
+        function showFunctionPanel(functionName) {
+            // 隐藏所有面板
+            document.querySelectorAll('.function-panel').forEach(panel => {
+                panel.classList.remove('active');
+            });
+
+            // 显示对应面板
+            const panelId = functionName + '-panel';
+            const panel = document.getElementById(panelId);
+            if (panel) {
+                panel.classList.add('active');
+                activeFunction = functionName;
+                updateStatus(`已切换到${getFunctionName(functionName)}功能`);
+            }
+        }
+
+        // 获取功能名称
+        function getFunctionName(key) {
+            const names = {
+                'create': '创建铝型材',
+                'align': '对齐铝型材',
+                'move': '移动铝型材',
+                'rotate': '旋转铝型材',
+                'flip': '翻转铝型材',
+                'stretch': '拉伸铝型材',
+                'hole': '快速开孔',
+                'corner': '添加角码'
+            };
+            return names[key] || key;
+        }
+
+        // 更新状态栏消息
+        function updateStatus(message) {
+            const statusElement = document.getElementById('status-message');
+            if (statusElement) {
+                statusElement.textContent = message;
+            }
+        }
+
+        // 设置处理状态
+        function setProcessing(isProcessing) {
+            const statusDot = document.querySelector('.status-dot');
+            if (statusDot) {
+                if (isProcessing) {
+                    statusDot.classList.remove('ready');
+                    statusDot.classList.add('processing');
+                } else {
+                    statusDot.classList.remove('processing');
+                    statusDot.classList.add('ready');
+                }
+            }
+        }
+
+        // ==================== 功能函数 ====================
+
+        // 创建铝型材
+        function createProfile() {
+            const length = document.getElementById('length').value;
+            const unit = document.getElementById('length-unit').value;
+
+            setProcessing(true);
+            updateStatus(`正在创建 ${selectedProfileSize} 铝型材，长度: ${length}${unit}...`);
+
+            // 通过 skp: 协议调用 Ruby 后端
+            try {
+                const params = `${selectedProfileSize}|${length}|${unit}`;
+                window.location = `skp:create_profile@${params}`;
+
+                // 2秒后重置状态
+                setTimeout(() => {
+                    setProcessing(false);
+                    updateStatus(`成功创建 ${selectedProfileSize} 铝型材`);
+                }, 2000);
+            } catch (error) {
+                setProcessing(false);
+                updateStatus(`创建失败: ${error}`);
+                console.error('创建铝型材错误:', error);
+            }
+        }
+
+        // 对齐铝型材
+        function alignProfiles() {
+            const alignType = document.querySelector('.dir-btn.active')?.getAttribute('data-align') || 'center-v';
+            const reference = document.getElementById('align-reference').value;
+
+            setProcessing(true);
+            updateStatus(`正在执行 ${getAlignName(alignType)} 操作...`);
+
+            try {
+                window.location = `skp:align_profiles@${alignType}|${reference}`;
+
+                setTimeout(() => {
+                    setProcessing(false);
+                    updateStatus(`对齐操作完成`);
+                }, 1500);
+            } catch (error) {
+                setProcessing(false);
+                updateStatus(`对齐失败: ${error}`);
+            }
+        }
+
+        // 获取对齐方式名称
+        function getAlignName(key) {
+            const names = {
+                'left': '左对齐',
+                'center-h': '水平居中',
+                'right': '右对齐',
+                'top': '顶部对齐',
+                'center-v': '垂直居中',
+                'bottom': '底部对齐',
+                'distribute-h': '水平分布',
+                'distribute-v': '垂直分布',
+                'center-all': '中心对齐'
+            };
+            return names[key] || key;
+        }
+
+        // 移动铝型材
+        function moveProfiles() {
+            const x = document.getElementById('move-x').value || 0;
+            const y = document.getElementById('move-y').value || 0;
+            const z = document.getElementById('move-z').value || 0;
+            const unit = document.getElementById('move-unit').value;
+
+            setProcessing(true);
+            updateStatus(`正在移动对象: X=${x}, Y=${y}, Z=${z}${unit}...`);
+
+            try {
+                window.location = `skp:move_profiles@${x}|${y}|${z}|${unit}`;
+
+                setTimeout(() => {
+                    setProcessing(false);
+                    updateStatus(`移动操作完成`);
+                }, 1500);
+            } catch (error) {
+                setProcessing(false);
+                updateStatus(`移动失败: ${error}`);
+            }
+        }
+
+        // 旋转铝型材
+        function rotateProfiles() {
+            const angle = document.getElementById('rotate-angle').value || 90;
+            const direction = document.getElementById('rotate-direction').value;
+            const center = document.getElementById('rotate-center').value;
+
+            setProcessing(true);
+            updateStatus(`正在旋转对象: ${angle}度, ${direction === 'cw' ? '顺时针' : '逆时针'}...`);
+
+            try {
+                window.location = `skp:rotate_profiles@${angle}|${direction}|${center}`;
+
+                setTimeout(() => {
+                    setProcessing(false);
+                    updateStatus(`旋转操作完成`);
+                }, 1500);
+            } catch (error) {
+                setProcessing(false);
+                updateStatus(`旋转失败: ${error}`);
+            }
+        }
+
+        // 翻转铝型材
+        function flipProfiles(axis) {
+            const plane = document.getElementById('flip-plane').value;
+            const copy = document.getElementById('flip-copy').checked;
+            const keepOriginal = document.getElementById('flip-keep-original').checked;
+
+            setProcessing(true);
+            updateStatus(`正在沿${axis.toUpperCase()}轴翻转对象...`);
+
+            try {
+                window.location = `skp:flip_profiles@${axis}|${plane}|${copy}|${keepOriginal}`;
+
+                setTimeout(() => {
+                    setProcessing(false);
+                    updateStatus(`翻转操作完成`);
+                }, 1500);
+            } catch (error) {
+                setProcessing(false);
+                updateStatus(`翻转失败: ${error}`);
+            }
+        }
+
+        // 拉伸铝型材
+        function stretchProfiles() {
+            const length = document.getElementById('stretch-length').value || 500;
+            const direction = document.getElementById('stretch-direction').value;
+            const keepConnections = document.getElementById('stretch-keep-connections').checked;
+
+            setProcessing(true);
+            updateStatus(`正在拉伸对象: ${length}mm, ${direction}...`);
+
+            try {
+                window.location = `skp:stretch_profiles@${length}|${direction}|${keepConnections}`;
+
+                setTimeout(() => {
+                    setProcessing(false);
+                    updateStatus(`拉伸操作完成`);
+                }, 1500);
+            } catch (error) {
+                setProcessing(false);
+                updateStatus(`拉伸失败: ${error}`);
+            }
+        }
+
+        // 快速开孔
+        function createHoles() {
+            const diameter = document.getElementById('hole-diameter').value || 8;
+            const depth = document.getElementById('hole-depth').value || 10;
+            const position = document.getElementById('hole-position').value;
+
+            setProcessing(true);
+            updateStatus(`正在创建孔: Ø${diameter}mm, 深度${depth}mm...`);
+
+            try {
+                window.location = `skp:create_holes@${diameter}|${depth}|${position}`;
+
+                setTimeout(() => {
+                    setProcessing(false);
+                    updateStatus(`开孔操作完成`);
+                }, 1500);
+            } catch (error) {
+                setProcessing(false);
+                updateStatus(`开孔失败: ${error}`);
+            }
+        }
+
+        // 添加角码
+        function addCorners() {
+            const size = document.getElementById('corner-size').value;
+            const thickness = document.getElementById('corner-thickness').value;
+            const autoAlign = document.getElementById('corner-auto-align').checked;
+            const addScrews = document.getElementById('corner-add-screws').checked;
+
+            setProcessing(true);
+            updateStatus(`正在添加${size}系列角码...`);
+
+            try {
+                window.location = `skp:add_corners@${size}|${thickness}|${autoAlign}|${addScrews}`;
+
+                setTimeout(() => {
+                    setProcessing(false);
+                    updateStatus(`角码添加完成`);
+                }, 1500);
+            } catch (error) {
+                setProcessing(false);
+                updateStatus(`添加角码失败: ${error}`);
+            }
+        }
+
+        // 设置移动方式
+        function setMoveRelative() {
+            document.querySelectorAll('#move-panel .btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            updateStatus('已切换为相对移动模式');
+        }
+
+        function setMoveAbsolute() {
+            document.querySelectorAll('#move-panel .btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            updateStatus('已切换为绝对移动模式');
+        }
+
+        // 设置旋转轴
+        function setRotateAxis(axis) {
+            document.querySelectorAll('#rotate-panel .btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            updateStatus(`已选择绕${axis.toUpperCase()}轴旋转`);
+        }
+
+        // 设置拉伸类型
+        function setStretchType(type) {
+            document.querySelectorAll('#stretch-panel .btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+
+            const typeNames = {
+                'length': '长度拉伸',
+                'scale': '比例缩放',
+                'taper': '锥度拉伸'
+            };
+            updateStatus(`已选择${typeNames[type] || type}模式`);
+        }
+
+        // 设置孔类型
+        function setHoleType(type) {
+            document.querySelectorAll('#hole-panel .btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+
+            const typeNames = {
+                'round': '圆孔',
+                'slot': '槽孔',
+                'square': '方孔',
+                'pattern': '阵列孔'
+            };
+            updateStatus(`已选择${typeNames[type] || type}类型`);
+        }
+
+        // 设置角码类型
+        function setCornerType(type) {
+            document.querySelectorAll('#corner-panel .btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+
+            const typeNames = {
+                'standard': '标准角码',
+                'strong': '加强角码',
+                'internal': '内置角码',
+                'adjustable': '可调角码'
+            };
+            updateStatus(`已选择${typeNames[type] || type}类型`);
+        }
+
+        // 显示帮助
+        function showHelp(functionName) {
+            const helpMessages = {
+                'create': '创建欧标铝型材：选择规格和长度，点击创建按钮。支持2020-40120全系列规格。',
+                'align': '对齐铝型材：选择对齐方式和对齐参考，可对齐单个或多个选中的铝型材。',
+                'move': '移动铝型材：输入XYZ方向移动距离，可选择相对移动或绝对移动模式。',
+                'rotate': '旋转铝型材：设置旋转轴、角度和旋转中心，可绕任意轴旋转铝型材。',
+                'flip': '翻转铝型材：沿指定轴翻转铝型材，可选择创建副本或保留原对象。',
+                'stretch': '拉伸铝型材：调整铝型材长度，可选择保持连接件或比例调整。',
+                'hole': '快速开孔：在铝型材上创建圆孔、槽孔或方孔，支持阵列开孔。',
+                'corner': '添加角码：为铝型材连接处添加角码，支持多种类型和安装选项。'
+            };
+
+            const message = helpMessages[functionName] || '该功能帮助信息未定义。';
+            updateStatus(`帮助：${message}`);
+
+            // 显示3秒后恢复状态
+            setTimeout(() => {
+                updateStatus(`已切换到${getFunctionName(activeFunction)}功能`);
+            }, 3000);
+        }
+
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', initialize);
+    </script>
+</body>
+</html>
