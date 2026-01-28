@@ -26,7 +26,7 @@ module YOOOOOO
           dialog_title = "YOOOOO AluPro"
 
           # 获取HTML文件的绝对路径
-          html_file_path = File.join(YOOOOOO::AluPro::PROJECT_ROOT, "/index-small.html")
+          html_file_path = File.join(YOOOOOO::AluPro::PROJECT_ROOT, "/ui/index.html")
 
           # 核心：根据SketchUp版本选择不同控件
           if Sketchup.version.to_f < 17.0
