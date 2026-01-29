@@ -7,7 +7,6 @@ module YOOOOOO
           return unless instance
 
           begin
-            model.start_operation("正面旋转90度")
 
             # 获取组件当前的变换矩阵
             current_transform = instance.transformation
@@ -35,10 +34,8 @@ module YOOOOOO
             new_transform = rotation * current_transform
             instance.transformation = new_transform
 
-            model.commit_operation
             puts "已沿正面旋转90度"
           rescue => e
-            model.abort_operation
             puts "正面旋转时出错: #{e.message}"
           end
         end
@@ -48,7 +45,6 @@ module YOOOOOO
           return unless instance
 
           begin
-            model.start_operation("侧面旋转90度")
 
             # 获取组件当前的变换矩阵
             current_transform = instance.transformation
@@ -76,10 +72,8 @@ module YOOOOOO
             new_transform = rotation * current_transform
             instance.transformation = new_transform
 
-            model.commit_operation
             puts "已沿侧面旋转90度"
           rescue => e
-            model.abort_operation
             puts "侧面旋转时出错: #{e.message}"
           end
         end
@@ -89,7 +83,6 @@ module YOOOOOO
           return unless instance
 
           begin
-            model.start_operation("顶面旋转90度")
 
             # 获取组件当前的变换矩阵
             current_transform = instance.transformation
@@ -117,10 +110,8 @@ module YOOOOOO
             new_transform = rotation * current_transform
             instance.transformation = new_transform
 
-            model.commit_operation
             puts "已沿顶面旋转90度"
           rescue => e
-            model.abort_operation
             puts "顶面旋转时出错: #{e.message}"
           end
         end
