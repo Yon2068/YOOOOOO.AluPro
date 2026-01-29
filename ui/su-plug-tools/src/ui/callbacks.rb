@@ -14,7 +14,7 @@ module YOOOOOO
             puts "收到 quick_create_profile 回调，参数: #{size}"
             # 调用核心功能模块
 
-            Core.quick_create_profile_tool(size)
+            Core::QuickCreateProfileTool.new(size)
           end
           @callback_count = callback_count + 1
 
@@ -25,7 +25,8 @@ module YOOOOOO
             size, length, unit = params.split("|")
             puts "收到 create_profile 回调，参数: #{size}, #{length}, #{unit}"
             # 调用核心功能模块
-            Core.create_profile_tool(size, length.to_f, unit)
+            # Core.create_profile_tool(size, length.to_f, unit)
+            Core::CreateProfileTool.new(size, length.to_f, unit)
           end
           @callback_count = callback_count + 1
 
@@ -34,7 +35,7 @@ module YOOOOOO
             direction = params
             puts "收到 rotate_tool 回调"
             # 调用核心功能模块
-            Core.rotate_tool(direction)
+            Core::RotateTool.new(direction)
           end
           @callback_count = callback_count + 1
 
@@ -44,7 +45,7 @@ module YOOOOOO
             puts is_copy
             puts "收到 snap_to_face_tool 回调"
             # 调用核心功能模块
-            Core.snap_to_face_tool(is_copy)
+            Core::SnapToFaceTool.new(is_copy)
           end
           @callback_count = callback_count + 1
 

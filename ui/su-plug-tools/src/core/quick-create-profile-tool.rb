@@ -22,6 +22,12 @@ module YOOOOOO
           @profile_length = nil
           @profile_direction = nil
           @profile_plane_normal = nil # 用于移动的平面法线
+          puts "=" * 50
+          puts "快速创建型材工具 v1.0"
+          puts "型材规格: #{size}"
+
+          Sketchup.active_model.select_tool(self)
+          Sketchup::focus()
 
           puts "快速创建工具已激活。步骤#{@step}: 请选择一个面作为起点"
           puts "型材规格: #{@size}"
@@ -403,7 +409,7 @@ module YOOOOOO
             normal = face.normal
             # 检查是否垂直于Z轴（型材的拉伸方向）
             if normal.parallel?(Z_AXIS) || normal.parallel?(Z_AXIS.reverse)
-              if face.edges.all? { |edge| edge.faces.size == 1 } || is_end_face?(face, face.parent)
+              if face.edges.all? { |edge| edge.faces.size == 1 } || is_end_face?(face)
                 end_faces << face
               end
             end
@@ -411,7 +417,7 @@ module YOOOOOO
           end_faces
         end
 
-        def is_end_face?(face, entities)
+        def is_end_face?(face)
           # 检查面是否为型材的端面
           normal = face.normal
           if normal.parallel?(Z_AXIS) || normal.parallel?(Z_AXIS.reverse)
@@ -892,16 +898,6 @@ module YOOOOOO
             # 静默处理绘制错误
           end
         end
-      end
-
-      # 主函数：启动快速创建工具
-      def self.quick_create_profile_tool(size)
-        puts "快速创建型材工具 v1.0"
-        puts "型材规格: #{size}"
-        puts "=" * 50
-        tool = QuickCreateProfileTool.new(size)
-        Sketchup.active_model.select_tool(tool)
-        Sketchup::focus()
       end
     end
   end

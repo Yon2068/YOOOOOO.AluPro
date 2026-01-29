@@ -4,6 +4,9 @@ module YOOOOOO
       class SnapToFaceTool
         # 构造函数
         def initialize(is_copy = false)
+          puts "=" * 50
+          puts "吸附到面工具 v1.0"
+          puts "请先选择要吸附的组件，然后启动此工具"
           @is_copy = is_copy
           @selected_components = []  # 从选择集中获取的组件列表
           @reference_face = nil    # 基准面
@@ -38,6 +41,12 @@ module YOOOOOO
           end
 
           puts "吸附工具已激活。已选择 #{@selected_components.length} 个组件。步骤1: 请选择基准面"
+
+          # 只有在有选中组件时才激活工具
+          if self.instance_variable_get(:@selected_components).any?
+            Sketchup.active_model.select_tool(self)
+            Sketchup::focus()
+          end
         end
 
         # 工具激活时调用
@@ -341,20 +350,6 @@ module YOOOOOO
         #     # 静默处理绘制错误
         #   end
         # end
-      end
-
-      # 主函数：启动吸附工具
-      def self.snap_to_face_tool(is_copy = false)
-        puts "吸附到面工具 v1.0"
-        puts "请先选择要吸附的组件，然后启动此工具"
-        puts "=" * 50
-
-        tool = SnapToFaceTool.new(is_copy)
-        # 只有在有选中组件时才激活工具
-        if tool.instance_variable_get(:@selected_components).any?
-          Sketchup.active_model.select_tool(tool)
-          Sketchup::focus()
-        end
       end
     end
   end

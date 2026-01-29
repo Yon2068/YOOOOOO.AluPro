@@ -4,9 +4,7 @@ module YOOOOOO
 
       # 型材放置工具类 - 完整三轴控制
       class CreateProfileTool
-        def initialize(original_def, pull_length)
-          @original_def = original_def
-          @pull_length = pull_length
+        def initialize(size, length, unit)
           @preview_instance = nil
           @preview_group = nil
           @ip = Sketchup::InputPoint.new
@@ -25,7 +23,9 @@ module YOOOOOO
             "5" => { x: 90, y: 0, z: 0 },
             "6" => { x: 90, y: 90, z: 0 },
           }
-
+          load_skp(size, length, unit)
+          Sketchup.active_model.select_tool(self)
+          Sketchup::focus()
           # 存储当前工具的状态
           @tool_active = true
         end
@@ -206,49 +206,43 @@ module YOOOOOO
             UI.messagebox("放置失败: #{e.message}")
           end
         end
-      end
 
-      # 主函数：导入SKP并启动放置工具
-      def self.create_profile_tool(size, length, unit)
-        puts "导入并放置型材: 规格=#{size}, 长度=#{length}#{unit}"
-        sku_mapping = {
-          "2020" => "2020.skp",
-          "2040" => "2040.skp",
-          "2060" => "2060.skp",
-          "3030" => "3030.skp",
-          "3060" => "3060.skp",
-          "3090" => "3090.skp",
-          "4040" => "4040.skp",
-          "4080" => "4080.skp",
-          "40120" => "40120.skp",
-        }
+        def load_skp(size, length, unit)
+          sku_mapping = {
+            "2020" => "2020.skp",
+            "2040" => "2040.skp",
+            "2060" => "2060.skp",
+            "3030" => "3030.skp",
+            "3060" => "3060.skp",
+            "3090" => "3090.skp",
+            "4040" => "4040.skp",
+            "4080" => "4080.skp",
+            "40120" => "40120.skp",
+          }
 
-        skp_path = File.join(YOOOOOO::AluPro::PROJECT_ROOT, "su-models", sku_mapping[size])
+          skp_path = File.join(YOOOOOO::AluPro::PROJECT_ROOT, "su-models", sku_mapping[size])
 
-        # 验证文件存在
-        unless File.exist?(skp_path)
-          UI.messagebox("找不到对应的模型文件")
-          return
+          # 验证文件存在
+          unless File.exist?(skp_path)
+            UI.messagebox("找不到对应的模型文件")
+            return
+          end
+
+          # 加载组件定义
+          @original_def = Sketchup.active_model.definitions.load(skp_path)
+          puts @original_def
+          if @original_def.nil?
+            UI.messagebox("无法加载SKP文件。")
+            return
+          end
+
+          @pull_length = length.to_f.send(unit.downcase)
+          puts "转换后的拉伸长度: #{@pull_length}"
+          # 为组件定义创建一个唯一名称，避免多次导入时的冲突
+          timestamp = Time.now.to_i
+          unique_name = "#{File.basename(skp_path, ".skp")}_#{timestamp}"
+          @original_def.name = unique_name
         end
-
-        model = Sketchup.active_model
-        # 加载组件定义
-        comp_def = model.definitions.load(skp_path)
-        puts comp_def
-        if comp_def.nil?
-          UI.messagebox("无法加载SKP文件。")
-          return
-        end
-
-        pull_length = length.to_f.send(unit.downcase)
-        puts "转换后的拉伸长度: #{pull_length}"
-        # 为组件定义创建一个唯一名称，避免多次导入时的冲突
-        timestamp = Time.now.to_i
-        unique_name = "#{File.basename(skp_path, ".skp")}_#{timestamp}"
-        comp_def.name = unique_name
-
-        tool = CreateProfileTool.new(comp_def, pull_length)
-        model.select_tool(tool)
       end
     end
   end

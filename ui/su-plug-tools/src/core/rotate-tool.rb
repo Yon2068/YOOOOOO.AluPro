@@ -4,6 +4,7 @@ module YOOOOOO
       class RotateTool
         # 构造函数
         def initialize(direction)
+          puts "=" * 50
           @selected_components = []  # 从选择集中获取的组件列表
           @model = Sketchup.active_model
           @view = @model.active_view
@@ -41,6 +42,11 @@ module YOOOOOO
           end
           # 开启事务
           @model.start_operation("旋转组件")
+
+          puts "旋转工具 v1.0"
+          puts "请先选择要旋转的组件，然后启动此工具"
+          Sketchup.active_model.select_tool(self)
+          Sketchup::focus()
         end
 
         # 工具激活时调用
@@ -103,16 +109,6 @@ module YOOOOOO
           #   Sketchup.status_text = "步骤1: 选择基准面 | 已选择 #{@selected_components.length} 个组件 | 移动鼠标选择面 | ESC退出"
           # end
         end
-      end
-
-      # 主函数：启动旋转工具
-      def self.rotate_tool(direction)
-        puts "旋转工具 v1.0"
-        puts "请先选择要旋转的组件，然后启动此工具"
-        puts "=" * 50
-        tool = RotateTool.new(direction)
-        Sketchup.active_model.select_tool(tool)
-        Sketchup::focus()
       end
     end
   end
