@@ -64,7 +64,7 @@ builder.Services.AddCors(options =>
 
 builder.Services.AddDbContext<AluProDbContext>(options =>
 {
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
 builder.Services.AddScoped<IAuthorRepository, EfAuthorRepository>();
@@ -123,7 +123,7 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<AluProDbContext>();
-    db.Database.Migrate();
+    db.Database.EnsureCreated();
     
     var seeder = scope.ServiceProvider.GetRequiredService<DbInitializer>();
     await seeder.SeedAsync();
