@@ -6,512 +6,417 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>YOOOOO 铝型材工具</title>
   <style>
-    /* 极简重置 */
+    :root {
+      --bg-color: #1e222b;
+      --panel-bg: #252a33;
+      --primary-color: #3a86ff;
+      --primary-hover: #2667d4;
+      --accent-color: #00b4d8;
+      --text-main: #e0e6ed;
+      --text-muted: #94a3b8;
+      --border-color: rgba(255, 255, 255, 0.08);
+      --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.2);
+      --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.3);
+      --radius-sm: 6px;
+      --radius-md: 10px;
+    }
+
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
-      font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Microsoft YaHei', sans-serif;
+      user-select: none;
     }
 
     body {
-      background: rgba(28, 35, 51, 0.95);
-      color: #e6e6e6;
-      width: 380px;
-      height: 520px;
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      height: 100vh;
       overflow: hidden;
-      border-radius: 8px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-      border: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      flex-direction: column;
     }
 
-    /* 紧凑头部 */
-    .header {
-      padding: 12px 16px;
-      background: rgba(0, 20, 40, 0.9);
-      border-bottom: 1px solid rgba(0, 180, 216, 0.3);
+    /* Header */
+    header {
+      padding: 16px 20px;
+      background: rgba(30, 34, 43, 0.95);
+      border-bottom: 1px solid var(--border-color);
       display: flex;
       justify-content: space-between;
       align-items: center;
+      backdrop-filter: blur(10px);
+      z-index: 10;
     }
 
     .brand {
-      font-size: 16px;
-      font-weight: 600;
-      background: linear-gradient(to right, #00b4d8, #90e0ef);
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 10px;
+      font-weight: 700;
+      font-size: 16px;
+      letter-spacing: 0.5px;
+      background: linear-gradient(135deg, #fff, #a5b4fc);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
 
-    .brand-icon {
-      width: 24px;
-      height: 24px;
-      background: linear-gradient(135deg, #00b4d8, #0077b6);
-      border-radius: 4px;
+    .brand-logo {
+      width: 28px;
+      height: 28px;
+      background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+      border-radius: 8px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 14px;
-      font-weight: bold;
       color: white;
+      font-size: 16px;
+      box-shadow: 0 2px 8px rgba(58, 134, 255, 0.3);
+      -webkit-text-fill-color: white;
     }
 
     .version {
-      font-size: 11px;
-      color: #888;
+      font-size: 10px;
+      padding: 2px 8px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 12px;
+      color: var(--text-muted);
     }
 
-
-    .tabs-container {
+    /* Content Area */
+    .content-area {
+      flex: 1;
+      padding: 16px 20px;
+      overflow-y: auto;
       position: relative;
-      background: rgba(0, 0, 0, 0.3);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-      padding: 0 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
     }
 
-    .tabs-scroll-wrapper {
-      position: relative;
-      overflow-x: auto;
-      overflow-y: hidden;
-      white-space: nowrap;
-      -webkit-overflow-scrolling: touch;
-      scrollbar-width: none;
-      /* Firefox */
-      padding: 8px 0;
+    .panel {
+      display: block; /* Always visible */
     }
 
-    .tabs-scroll-wrapper::-webkit-scrollbar {
-      display: auto;
-      height: 15px;
-      /* Chrome, Safari */
-    }
-
-    /* 滚动条上的滑块 */
-    .tabs-scroll-wrapper::-webkit-scrollbar-thumb {
-      background: linear-gradient(135deg, #00b4d8, #0077b6);
-      /* 滑块颜色 */
-      border-radius: 10px;
-      /* 滑块圆角 */
-    }
-
-    /* 滚动条轨道 */
-    .tabs-scroll-wrapper::-webkit-scrollbar-track {
-      background: #474747;
-      /* 轨道颜色 */
-    }
-
-    .tab-nav {
-      display: inline-flex;
-      gap: 4px;
-      min-width: 100%;
-    }
-
-    .tab-btn {
-      padding: 8px 12px;
-      font-size: 12px;
-      color: #aaa;
-      background: none;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      transition: all 0.2s;
-      white-space: nowrap;
+    /* Section Header within content */
+    .section-header {
       display: flex;
       align-items: center;
-      gap: 6px;
-      flex-shrink: 0;
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border-color);
     }
 
-    .tab-btn:hover {
-      background: rgba(255, 255, 255, 0.05);
-      color: #ddd;
-    }
-
-    .tab-btn.active {
-      color: #00b4d8;
-      background: rgba(0, 180, 216, 0.15);
-      box-shadow: 0 0 0 1px rgba(0, 180, 216, 0.3);
-    }
-
-    .tab-icon {
+    .section-title {
       font-size: 14px;
-    }
-
-    /* 滚动提示遮罩 */
-    .scroll-hint {
-      position: absolute;
-      top: 0;
-      bottom: 0;
-      width: 20px;
-      pointer-events: none;
-      z-index: 2;
-    }
-
-    .scroll-hint.left {
-      left: 0;
-      background: linear-gradient(to right, rgba(28, 35, 51, 0.8), transparent);
-    }
-
-    .scroll-hint.right {
-      right: 0;
-      background: linear-gradient(to left, rgba(28, 35, 51, 0.8), transparent);
-    }
-
-    /* 主内容区 */
-    .content {
-      height: calc(100% - 100px);
-      overflow-y: auto;
-      padding: 16px;
-    }
-
-    /* 面板和控件样式（保持原有紧凑设计） */
-    .panel {
-      display: none;
-    }
-
-    .panel.active {
-      display: block;
-    }
-
-    .control-group {
-      margin-bottom: 20px;
-    }
-
-    .group-title {
-      font-size: 13px;
       font-weight: 600;
-      color: #00b4d8;
-      margin-bottom: 10px;
-      padding-bottom: 4px;
-      border-bottom: 1px solid rgba(0, 180, 216, 0.3);
+      color: var(--accent-color);
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
 
-    .spec-grid {
+    /* Cards & Controls */
+    .card {
+      background: var(--panel-bg);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      margin-bottom: 16px;
+      border: 1px solid var(--border-color);
+    }
+
+    .card-title {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+      font-weight: 600;
+    }
+
+    .grid-specs {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 8px;
-      margin-bottom: 15px;
+      gap: 10px;
     }
 
     .spec-btn {
-      padding: 10px 6px;
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 4px;
-      color: #ccc;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid transparent;
+      border-radius: var(--radius-sm);
+      color: var(--text-muted);
+      padding: 10px 0;
+      font-size: 13px;
       cursor: pointer;
-      font-size: 14px;
-      font-weight: 600;
-      text-align: center;
       transition: all 0.2s;
     }
 
     .spec-btn:hover {
-      background: rgba(0, 180, 216, 0.1);
-      border-color: rgba(0, 180, 216, 0.3);
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--text-main);
     }
 
     .spec-btn.active {
-      background: rgba(0, 180, 216, 0.2);
-      border-color: #00b4d8;
-      color: white;
-      box-shadow: 0 0 8px rgba(0, 180, 216, 0.3);
+      background: rgba(58, 134, 255, 0.15);
+      border-color: rgba(58, 134, 255, 0.4);
+      color: var(--primary-color);
+      font-weight: 600;
     }
 
-    .input-row {
+    .input-group {
       display: flex;
-      gap: 10px;
-      margin-bottom: 12px;
       align-items: center;
+      gap: 12px;
+      margin-top: 16px;
     }
 
-    .input-row label {
-      font-size: 12px;
-      color: #aaa;
-      min-width: 60px;
-    }
-
-    .input-row input,
-    .input-row select {
+    .input-wrapper {
       flex: 1;
-      background: rgba(255, 255, 255, 0.07);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 4px;
-      color: white;
-      padding: 8px 10px;
-      font-size: 13px;
-      min-width: 0;
+      position: relative;
+      display: flex;
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border-color);
+      transition: border-color 0.2s;
     }
 
-    .input-row input:focus,
-    .input-row select:focus {
+    .input-wrapper:focus-within {
+      border-color: var(--primary-color);
+    }
+
+    .input-wrapper input {
+      flex: 1;
+      background: none;
+      border: none;
+      color: var(--text-main);
+      padding: 10px 12px;
+      font-size: 14px;
       outline: none;
-      border-color: #00b4d8;
-      box-shadow: 0 0 0 1px rgba(0, 180, 216, 0.2);
+      width: 100%;
     }
 
-    .align-btn {
-      padding: 10px 6px;
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 4px;
-      color: #ccc;
+    .unit-select {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 12px;
+      padding: 0 10px;
+      border-left: 1px solid var(--border-color);
+      outline: none;
       cursor: pointer;
-      font-size: 18px;
-      text-align: center;
+    }
+
+    .unit-select:hover {
+      color: var(--text-main);
+    }
+
+    /* Buttons */
+    .action-btn {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: var(--radius-sm);
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
       transition: all 0.2s;
+      margin-top: 12px;
     }
 
-    .align-btn:hover {
-      background: rgba(0, 180, 216, 0.1);
-    }
-
-    .align-btn.active {
-      background: rgba(0, 180, 216, 0.2);
-      border-color: #00b4d8;
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary-color), #4361ee);
       color: white;
+      box-shadow: 0 4px 12px rgba(67, 97, 238, 0.3);
     }
 
+    .btn-primary:hover {
+      filter: brightness(1.1);
+      transform: translateY(-1px);
+    }
+
+    .btn-primary:active {
+      transform: translateY(0);
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--text-main);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.12);
+    }
+
+    /* Transform Controls */
     .rotate-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 6px;
-      margin-bottom: 15px;
+      gap: 12px;
     }
 
     .rotate-btn {
-      padding: 10px 6px;
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 4px;
-      color: #ccc;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 16px 8px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid transparent;
+      border-radius: var(--radius-sm);
       cursor: pointer;
-      font-size: 18px;
-      text-align: center;
       transition: all 0.2s;
     }
 
     .rotate-btn:hover {
-      background: rgba(0, 180, 216, 0.1);
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .rotate-btn:active {
+      transform: scale(0.98);
+    }
+
+    .rotate-icon {
+      width: 32px;
+      height: 32px;
+      opacity: 0.8;
+      transition: opacity 0.2s;
+    }
+
+    .rotate-btn:hover .rotate-icon {
+      opacity: 1;
     }
 
     .rotate-label {
-      font-size: 10px;
-      margin-top: 4px;
-      display: block;
-    }
-
-    .rotate-btn img {
-      width: 24px;
-      height: 24px;
-    }
-
-    .btn-row {
-      display: flex;
-      gap: 10px;
-      margin-top: 20px;
-    }
-
-    .btn {
-      flex: 1;
-      padding: 10px 12px;
-      background: linear-gradient(135deg, #00b4d8, #0077b6);
-      color: white;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 13px;
-      font-weight: 500;
-      transition: all 0.2s;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-    }
-
-    .btn:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 4px 12px rgba(0, 180, 216, 0.3);
-    }
-
-    .btn:active {
-      transform: translateY(0);
-    }
-
-    .btn.secondary {
-      background: rgba(255, 255, 255, 0.1);
-      color: #ddd;
-    }
-
-    .direction-controls {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 6px;
-      margin-bottom: 15px;
-    }
-
-    .dir-btn {
-      padding: 12px 6px;
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 4px;
-      color: #ccc;
-      cursor: pointer;
-      text-align: center;
-      transition: all 0.2s;
-    }
-
-    .dir-btn:hover {
-      background: rgba(0, 180, 216, 0.1);
-    }
-
-    .dir-btn.active {
-      background: rgba(0, 180, 216, 0.2);
-      border-color: #00b4d8;
-      color: white;
-    }
-
-    .dir-icon {
-      font-size: 16px;
-      margin-bottom: 4px;
-    }
-
-    /* 状态栏 */
-    .status-bar {
-      padding: 8px 16px;
-      background: rgba(0, 0, 0, 0.4);
-      border-top: 1px solid rgba(255, 255, 255, 0.1);
       font-size: 11px;
-      color: #888;
+      color: var(--text-muted);
+    }
+
+    .checkbox-wrapper {
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      height: 32px;
+      gap: 10px;
+      margin: 16px 0;
+      cursor: pointer;
+    }
+
+    .checkbox-wrapper input[type="checkbox"] {
+      appearance: none;
+      width: 18px;
+      height: 18px;
+      border: 2px solid var(--text-muted);
+      border-radius: 4px;
+      background: transparent;
+      cursor: pointer;
+      position: relative;
+      transition: all 0.2s;
+    }
+
+    .checkbox-wrapper input[type="checkbox"]:checked {
+      background: var(--primary-color);
+      border-color: var(--primary-color);
+    }
+
+    .checkbox-wrapper input[type="checkbox"]:checked::after {
+      content: '✓';
+      position: absolute;
+      color: white;
+      font-size: 12px;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    .checkbox-label {
+      font-size: 13px;
+      color: var(--text-main);
+    }
+
+    /* Status Bar */
+    .status-bar {
+      padding: 0 20px;
+      height: 36px;
+      background: rgba(0, 0, 0, 0.2);
+      border-top: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .status-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
 
     .status-dot {
-      width: 8px;
-      height: 8px;
+      width: 6px;
+      height: 6px;
       border-radius: 50%;
-      background-color: #4CAF50;
-      margin-right: 6px;
+      background: #10b981;
+      box-shadow: 0 0 8px rgba(16, 185, 129, 0.4);
     }
 
     .status-dot.processing {
-      background-color: #FFC107;
+      background: #f59e0b;
       animation: pulse 1.5s infinite;
     }
 
-    /* 横梁按钮图标大小调整 */
-    .dir-btn[data-beam-mode] .dir-icon {
-      font-size: 18px;
-      margin-bottom: 2px;
-    }
-
-    .dir-btn[data-beam-mode] div:last-child {
-      font-size: 11px;
-    }
-
     @keyframes pulse {
-
-      0%,
-      100% {
-        opacity: 1;
-      }
-
-      50% {
-        opacity: 0.5;
-      }
+      0% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.4); }
+      70% { box-shadow: 0 0 0 6px rgba(245, 158, 11, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0); }
     }
 
-    /* 滚动条样式 */
-    .content::-webkit-scrollbar {
+    /* Scrollbar */
+    ::-webkit-scrollbar {
       width: 6px;
     }
 
-    .content::-webkit-scrollbar-track {
-      background: rgba(255, 255, 255, 0.05);
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.1);
       border-radius: 3px;
     }
 
-    .content::-webkit-scrollbar-thumb {
-      background: rgba(0, 180, 216, 0.3);
-      border-radius: 3px;
-    }
-
-    .content::-webkit-scrollbar-thumb:hover {
-      background: rgba(0, 180, 216, 0.5);
-    }
-
-    /* 标签滚动指示器 - 新增 */
-    .scroll-indicator {
-      text-align: center;
-      padding: 4px;
-      font-size: 10px;
-      color: #666;
-      display: none;
-    }
-
-    .tabs-container.scrollable .scroll-indicator {
-      display: block;
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(255, 255, 255, 0.2);
     }
   </style>
 </head>
 
 <body>
-  <!-- 紧凑头部 -->
-  <div class="header">
+  <header>
     <div class="brand">
-      <div class="brand-icon">Y</div>
-      <span>铝型材工具</span>
+      <div class="brand-logo">Y</div>
+      <span>AluPro Tools</span>
     </div>
     <div class="version">v1.0</div>
-  </div>
+  </header>
 
-  <!-- 可滚动标签导航 -->
-  <div class="tabs-container" id="tabs-container">
-    <div class="scroll-hint left"></div>
-    <div class="scroll-hint right"></div>
-
-    <div class="tabs-scroll-wrapper" id="tabs-scroller">
-      <div class="tab-nav" id="tab-nav">
-        <button class="tab-btn active" data-tab="create">
-          <span class="tab-icon">📐</span>型材
-        </button>
-        <button class="tab-btn" data-tab="transform">
-          <span class="tab-icon">↔️</span>变换
-        </button>
-        <button class="tab-btn" data-tab="move">
-          <span class="tab-icon">✥</span>移动
-        </button>
-        <button class="tab-btn" data-tab="flip">
-          <span class="tab-icon">⇄</span>翻转
-        </button>
-        <button class="tab-btn" data-tab="stretch">
-          <span class="tab-icon">↔</span>拉伸
-        </button>
-        <button class="tab-btn" data-tab="hole">
-          <span class="tab-icon">⚫</span>开孔
-        </button>
-        <button class="tab-btn" data-tab="corner">
-          <span class="tab-icon">⎔</span>角码
-        </button>
+  <div class="content-area">
+    <!-- Create Panel -->
+    <div id="create-panel" class="panel">
+      <div class="section-header">
+        <div class="section-title">
+          <span>📐 型材生成</span>
+        </div>
       </div>
-    </div>
-    <div class="scroll-indicator">← 滑动查看全部 →</div>
-  </div>
 
-  <!-- 主内容区 -->
-  <div class="content">
-    <!-- 创建面板 -->
-    <div class="panel active" id="create-panel">
-      <div class="control-group">
-        <div class="group-title">选择规格</div>
-        <div class="spec-grid">
+      <div class="card">
+        <div class="card-title">规格选择</div>
+        <div class="grid-specs">
           <button class="spec-btn active" data-size="2020">2020</button>
           <button class="spec-btn" data-size="2040">2040</button>
           <button class="spec-btn" data-size="2060">2060</button>
@@ -523,669 +428,166 @@
           <button class="spec-btn" data-size="40120">40120</button>
         </div>
       </div>
-      <!-- 手动输入 -->
-      <div class="control-group">
-        <div class="group-title">长度设置</div>
-        <div class="input-row">
-          <label>长度:</label>
-          <input type="number" id="length" value="1000" min="10" max="10000" step="10">
-          <select id="length-unit">
-            <option value="mm" selected>mm</option>
-            <option value="cm">cm</option>
-            <option value="m">m</option>
-          </select>
-          <button class="btn" id="create-btn">创建
-          </button>
+
+      <div class="card">
+        <div class="card-title">参数设置</div>
+        <div class="input-group">
+          <label style="font-size: 13px; color: var(--text-muted);">长度</label>
+          <div class="input-wrapper">
+            <input type="number" id="length" value="1000" min="10" max="10000" step="10">
+            <select id="length-unit" class="unit-select">
+              <option value="mm" selected>mm</option>
+              <option value="cm">cm</option>
+              <option value="m">m</option>
+            </select>
+          </div>
         </div>
-      </div>
-      <div class="btn-row">
-        <button class="btn" id="quick-create-btn">
-          快速创建
+        <button class="action-btn btn-primary" id="create-btn">
+          <span>立即创建</span>
+        </button>
+        <button class="action-btn btn-secondary" id="quick-create-btn">
+          <span>快速创建 (默认长度)</span>
         </button>
       </div>
     </div>
 
-    <!-- 旋转 -->
-    <div class="panel" id="transform-panel">
-      <div class="control-group">
-        <div class="group-title">快速旋转</div>
+    <!-- Transform Panel -->
+    <div id="transform-panel" class="panel">
+      <div class="card">
+        <div class="card-title">空间旋转</div>
         <div class="rotate-grid">
-          <button class="rotate-btn" data-direction="front"><img src="../icons/rotate1.png" alt="正面旋转"><span
-              class="rotate-label">正面旋转(x)</span></button>
-          <button class="rotate-btn" data-direction="side"><img src="../icons/rotate2.png" alt="侧面旋转"><span
-              class="rotate-label">侧面旋转(y)</span></button>
-          <button class="rotate-btn" data-direction="top"><img src="../icons/rotate3-2.png" alt="顶面旋转"><span
-              class="rotate-label">顶面旋转(z)</span></button>
-        </div>
-      </div>
-      <div class="control-group">
-        <div class="group-title">对齐选项</div>
-        <div class="input-row">
-          <label>创建副本:</label>
-          <input type="checkbox" id="snap-copy" style="width: auto;">
-        </div>
-      </div>
-      <div class="btn-row">
-        <button class="btn" id="align-btn">快速对齐
-        </button>
-      </div>
-    </div>
-
-    <!-- 移动面板 -->
-    <div class="panel" id="move-panel">
-      <div class="control-group">
-        <div class="group-title">移动距离</div>
-        <div class="input-row">
-          <label>X:</label>
-          <input type="number" id="move-x" value="0" step="10">
-          <select id="move-unit">
-            <option value="mm">mm</option>
-            <option value="m" selected>m</option>
-          </select>
-        </div>
-        <div class="input-row">
-          <label>Y:</label>
-          <input type="number" id="move-y" value="0" step="10">
-        </div>
-        <div class="input-row">
-          <label>Z:</label>
-          <input type="number" id="move-z" value="0" step="10">
-        </div>
-      </div>
-
-      <div class="control-group">
-        <div class="group-title">移动方式</div>
-        <div class="direction-controls">
-          <button class="dir-btn active" data-mode="relative">
-            <div class="dir-icon">Δ</div>
-            <div>相对移动</div>
+          <button class="rotate-btn" data-direction="front">
+            <img src="../icons/rotate1.png" alt="X" class="rotate-icon">
+            <span class="rotate-label">前视图(X)</span>
           </button>
-          <button class="dir-btn" data-mode="absolute">
-            <div class="dir-icon">⌖</div>
-            <div>绝对移动</div>
+          <button class="rotate-btn" data-direction="side">
+            <img src="../icons/rotate2.png" alt="Y" class="rotate-icon">
+            <span class="rotate-label">侧视图(Y)</span>
           </button>
-          <button class="dir-btn" data-mode="absolute">
-            <div class="dir-icon">⇥</div>
-            <div>移动到面</div>
+          <button class="rotate-btn" data-direction="top">
+            <img src="../icons/rotate3-2.png" alt="Z" class="rotate-icon">
+            <span class="rotate-label">顶视图(Z)</span>
           </button>
         </div>
       </div>
 
-      <div class="btn-row">
-        <button class="btn" id="move-btn">
-          <span class="btn-icon">✥</span>移动对象
-        </button>
-      </div>
-    </div>
-
-
-    <!-- 翻转面板 -->
-    <div class="panel" id="flip-panel">
-      <div class="control-group">
-        <div class="group-title">翻转轴</div>
-        <div class="direction-controls">
-          <button class="dir-btn" data-axis="x">
-            <div class="dir-icon">X</div>
-            <div>X轴</div>
-          </button>
-          <button class="dir-btn" data-axis="y">
-            <div class="dir-icon">Y</div>
-            <div>Y轴</div>
-          </button>
-          <button class="dir-btn" data-axis="z">
-            <div class="dir-icon">Z</div>
-            <div>Z轴</div>
-          </button>
-        </div>
-      </div>
-
-      <div class="control-group">
-        <div class="group-title">翻转选项</div>
-        <div class="input-row">
-          <label>创建副本:</label>
-          <input type="checkbox" id="flip-copy" checked style="width: auto;">
-        </div>
-      </div>
-
-      <div class="btn-row">
-        <button class="btn" id="flip-btn">
-          <span class="btn-icon">⇄</span>执行翻转
-        </button>
-      </div>
-    </div>
-
-    <!-- 拉伸面板 -->
-    <div class="panel" id="stretch-panel">
-      <div class="control-group">
-        <div class="group-title">拉伸参数</div>
-        <div class="input-row">
-          <label>长度:</label>
-          <input type="number" id="stretch-length" value="500" min="10" max="5000" step="10">
-          <select id="stretch-direction">
-            <option value="positive" selected>正向</option>
-            <option value="negative">负向</option>
-            <option value="both">双向</option>
-          </select>
-        </div>
-      </div>
-
-      <div class="control-group">
-        <div class="group-title">拉伸选项</div>
-        <div class="input-row">
-          <label>保持连接:</label>
-          <input type="checkbox" id="stretch-keep-connections" checked style="width: auto;">
-        </div>
-      </div>
-
-      <div class="btn-row">
-        <button class="btn" id="stretch-btn">
-          <span class="btn-icon">↔</span>拉伸对象
-        </button>
-      </div>
-    </div>
-
-    <!-- 开孔面板 -->
-    <div class="panel" id="hole-panel">
-      <div class="control-group">
-        <div class="group-title">孔参数</div>
-        <div class="input-row">
-          <label>直径:</label>
-          <input type="number" id="hole-diameter" value="8" min="2" max="50" step="0.5">
-          <select>
-            <option value="mm">mm</option>
-          </select>
-        </div>
-        <div class="input-row">
-          <label>深度:</label>
-          <input type="number" id="hole-depth" value="10" min="1" max="100" step="1">
-          <select>
-            <option value="mm">mm</option>
-          </select>
-        </div>
-      </div>
-
-      <div class="control-group">
-        <div class="group-title">孔类型</div>
-        <div class="direction-controls">
-          <button class="dir-btn active" data-type="round">
-            <div class="dir-icon">○</div>
-            <div>圆孔</div>
-          </button>
-          <button class="dir-btn" data-type="slot">
-            <div class="dir-icon">▬</div>
-            <div>槽孔</div>
-          </button>
-          <button class="dir-btn" data-type="square">
-            <div class="dir-icon">□</div>
-            <div>方孔</div>
-          </button>
-        </div>
-      </div>
-
-      <div class="btn-row">
-        <button class="btn" id="hole-btn">
-          <span class="btn-icon">⚫</span>创建孔
-        </button>
-      </div>
-    </div>
-
-    <!-- 角码面板 -->
-    <div class="panel" id="corner-panel">
-      <div class="control-group">
-        <div class="group-title">角码参数</div>
-        <div class="input-row">
-          <label>系列:</label>
-          <select id="corner-size">
-            <option value="20" selected>20系列</option>
-            <option value="30">30系列</option>
-            <option value="40">40系列</option>
-          </select>
-        </div>
-        <div class="input-row">
-          <label>厚度:</label>
-          <select id="corner-thickness">
-            <option value="2" selected>2mm</option>
-            <option value="2.5">2.5mm</option>
-            <option value="3">3mm</option>
-          </select>
-        </div>
-      </div>
-
-      <div class="control-group">
-        <div class="group-title">角码类型</div>
-        <div class="direction-controls">
-          <button class="dir-btn active" data-type="standard">
-            <div class="dir-icon">⎔</div>
-            <div>标准</div>
-          </button>
-          <button class="dir-btn" data-type="strong">
-            <div class="dir-icon">⧉</div>
-            <div>加强</div>
-          </button>
-          <button class="dir-btn" data-type="internal">
-            <div class="dir-icon">⊡</div>
-            <div>内置</div>
-          </button>
-        </div>
-      </div>
-
-      <div class="btn-row">
-        <button class="btn" id="corner-btn">
-          <span class="btn-icon">⎔</span>添加角码
+      <div class="card">
+        <div class="card-title">智能对齐</div>
+        <label class="checkbox-wrapper">
+          <input type="checkbox" id="snap-copy">
+          <span class="checkbox-label">保留原始对象副本</span>
+        </label>
+        <button class="action-btn btn-primary" id="align-btn">
+          <span>执行吸附对齐</span>
         </button>
       </div>
     </div>
   </div>
 
-  <!-- 状态栏 -->
   <div class="status-bar">
-    <div style="display: flex; align-items: center;">
+    <div class="status-left">
       <div class="status-dot" id="status-dot"></div>
-      <span id="status-text">就绪</span>
+      <span id="status-text">系统就绪</span>
     </div>
-    <div id="selected-count">已选: 0</div>
   </div>
 
   <script>
-    // 状态变量
-    let selectedProfileSize = '2020';
-    let selectedAlign = 'center-v';
-    let selectedAxis = 'z';
-    let selectedHoleType = 'round';
-    let selectedCornerType = 'standard';
+    // State
+    let state = {
+      profileSize: '2020',
+      isProcessing: false
+    };
 
-    // 初始化函数
-    function initialize() {
-      // 设置标签点击事件
-      document.querySelectorAll('.tab-btn').forEach(btn => {
-        btn.addEventListener('click', function () {
-          // 更新活动标签
-          document.querySelectorAll('.tab-btn').forEach(b => {
-            b.classList.remove('active');
-          });
-          this.classList.add('active');
+    // DOM Elements
+    const elements = {
+      specBtns: document.querySelectorAll('.spec-btn'),
+      statusText: document.getElementById('status-text'),
+      statusDot: document.getElementById('status-dot')
+    };
 
-          // 滚动到可见位置
-          scrollTabToView(this);
+    // Initialization
+    function init() {
+      bindEvents();
+      updateStatus(`系统就绪 - 当前规格: ${state.profileSize}`);
+    }
 
-          // 显示对应面板
-          const tabId = this.getAttribute('data-tab');
-          showTabPanel(tabId);
+    // Event Binding
+    function bindEvents() {
+      // Spec Selection
+      elements.specBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          elements.specBtns.forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          state.profileSize = btn.dataset.size;
+          updateStatus(`已选择 ${state.profileSize} 型材`);
         });
       });
 
-      // 规格选择
-      document.querySelectorAll('.spec-btn').forEach(btn => {
-        btn.addEventListener('click', function () {
-          document.querySelectorAll('.spec-btn').forEach(b => {
-            b.classList.remove('active');
-          });
-          this.classList.add('active');
-          selectedProfileSize = this.getAttribute('data-size');
-          updateStatus(`已选择 ${selectedProfileSize} 铝型材`);
-        });
-      });
-
-      // 对齐方式选择
-      // document.querySelectorAll('.align-btn').forEach(btn => {
-      //   btn.addEventListener('click', function () {
-      //     document.querySelectorAll('.align-btn').forEach(b => {
-      //       b.classList.remove('active');
-      //     });
-      //     this.classList.add('active');
-      //     selectedAlign = this.getAttribute('data-align');
-      //   });
-      // });
-
-      // 方向按钮选择
-      document.querySelectorAll('.dir-btn').forEach(btn => {
-        btn.addEventListener('click', function () {
-          const parent = this.closest('.direction-controls');
-          if (parent) {
-            parent.querySelectorAll('.dir-btn').forEach(b => {
-              b.classList.remove('active');
-            });
-            this.classList.add('active');
-
-            // 根据上下文设置选中的值
-            const panelId = this.closest('.panel').id;
-            const dataType = this.getAttribute('data-type');
-            const dataAxis = this.getAttribute('data-axis');
-
-            if (dataAxis) selectedAxis = dataAxis;
-            if (dataType) {
-              if (panelId === 'hole-panel') selectedHoleType = dataType;
-              if (panelId === 'corner-panel') selectedCornerType = dataType;
-            }
-          }
-        });
-      });
-
-      // 功能按钮事件
-      document.getElementById('quick-create-btn').addEventListener('click', quickCreateProfile);
+      // Actions
       document.getElementById('create-btn').addEventListener('click', createProfile);
+      document.getElementById('quick-create-btn').addEventListener('click', quickCreateProfile);
       document.getElementById('align-btn').addEventListener('click', alignProfiles);
-      document.querySelectorAll('.rotate-btn')
-        .forEach(btn => btn.addEventListener('click', rotateProfiles));
-      document.getElementById('move-btn').addEventListener('click', moveProfiles);
-      document.getElementById('flip-btn').addEventListener('click', flipProfiles);
-      document.getElementById('stretch-btn').addEventListener('click', stretchProfiles);
-      document.getElementById('hole-btn').addEventListener('click', createHoles);
-      document.getElementById('corner-btn').addEventListener('click', addCorners);
-
-      // 初始化标签滚动提示
-      updateScrollHints();
-
-      // 监听滚动事件更新提示
-      const scroller = document.getElementById('tabs-scroller');
-      scroller.addEventListener('scroll', updateScrollHints);
-
-      // 窗口大小变化时更新提示
-      window.addEventListener('resize', updateScrollHints);
-
-      // 模拟选中对象数量更新
-      // simulateSelectionUpdate();
-
-      updateStatus('铝型材工具已就绪');
-    }
-    // 滚动标签到可见位置
-    function scrollTabToView(tabElement) {
-      const scroller = document.getElementById('tabs-scroller');
-      const container = document.getElementById('tabs-container');
-      const tabRect = tabElement.getBoundingClientRect();
-      const containerRect = container.getBoundingClientRect();
-
-      // 如果标签在左侧不可见
-      if (tabRect.left < containerRect.left) {
-        scroller.scrollLeft += tabRect.left - containerRect.left - 10;
-      }
-      // 如果标签在右侧不可见
-      else if (tabRect.right > containerRect.right) {
-        scroller.scrollLeft += tabRect.right - containerRect.right + 10;
-      }
-    }
-
-    // 更新滚动提示
-    function updateScrollHints() {
-      const scroller = document.getElementById('tabs-scroller');
-      const leftHint = document.querySelector('.scroll-hint.left');
-      const rightHint = document.querySelector('.scroll-hint.right');
-
-      // 显示/隐藏左侧提示
-      if (scroller.scrollLeft > 10) {
-        leftHint.style.opacity = '1';
-      } else {
-        leftHint.style.opacity = '0';
-      }
-
-      // 显示/隐藏右侧提示
-      if (scroller.scrollLeft < scroller.scrollWidth - scroller.clientWidth - 10) {
-        rightHint.style.opacity = '1';
-      } else {
-        rightHint.style.opacity = '0';
-      }
-    }
-
-    // 显示标签页对应面板
-    function showTabPanel(tabId) {
-      // 隐藏所有面板
-      document.querySelectorAll('.panel').forEach(panel => {
-        panel.classList.remove('active');
+      
+      document.querySelectorAll('.rotate-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => rotateProfiles(e.currentTarget.dataset.direction));
       });
+    }
 
-      // 显示对应面板
-      const panel = document.getElementById(tabId + '-panel');
-      if (panel) {
-        panel.classList.add('active');
-        updateStatus(`切换到${getTabName(tabId)}功能`);
+    function updateStatus(msg) {
+      if (elements.statusText) elements.statusText.textContent = msg;
+    }
+
+    function setProcessing(loading) {
+      state.isProcessing = loading;
+      if (elements.statusDot) {
+        elements.statusDot.classList.toggle('processing', loading);
       }
     }
 
-    // 获取标签页名称
-    function getTabName(key) {
-      const names = {
-        'create': '创建铝型材',
-        'transform': '变换',
-        'move': '移动',
-        'flip': '翻转',
-        'stretch': '拉伸',
-        'hole': '开孔',
-        'corner': '角码'
-      };
-      return names[key] || key;
-    }
-
-    // 更新状态
-    function updateStatus(message) {
-      const statusElement = document.getElementById('status-text');
-      if (statusElement) {
-        statusElement.textContent = message;
-      }
-    }
-
-    // 设置处理状态
-    function setProcessing(isProcessing) {
-      const statusDot = document.getElementById('status-dot');
-      if (statusDot) {
-        if (isProcessing) {
-          statusDot.classList.add('processing');
-        } else {
-          statusDot.classList.remove('processing');
-        }
-      }
-    }
-
-    // 模拟选中对象更新
-    function simulateSelectionUpdate() {
-      // 实际应用中应由Ruby后端通过回调更新
-      // setInterval(() => {
-      //   const count = Math.floor(Math.random() * 5);
-      //   document.getElementById('selected-count').textContent = `已选: ${count}`;
-      // }, 3000);
-    }
-
-    // ==================== 核心功能函数 ====================
-
-    function quickCreateProfile() {
+    function callRuby(action, params) {
+      if (state.isProcessing) return;
       setProcessing(true);
-      updateStatus(`创建 ${selectedProfileSize} 铝型材...`);
 
       try {
-        const params = `${selectedProfileSize}`;
-        window.location = `skp:quick_create_profile@${params}`;
-
+        window.location = `skp:${action}@${params}`;
+        // Reset status after a delay since we can't get callback from synchronous skp calls easily here
         setTimeout(() => {
           setProcessing(false);
-          updateStatus(`创建完成`);
+          updateStatus('操作完成');
         }, 1500);
-      } catch (error) {
+      } catch (e) {
+        console.error(e);
         setProcessing(false);
-        updateStatus(`创建失败`);
+        updateStatus('操作失败');
       }
     }
 
+    // Action Handlers
     function createProfile() {
       const length = document.getElementById('length').value;
       const unit = document.getElementById('length-unit').value;
+      updateStatus(`正在创建 ${state.profileSize} 型材...`);
+      callRuby('create_profile', `${state.profileSize}|${length}|${unit}`);
+    }
 
-      setProcessing(true);
-      updateStatus(`创建 ${selectedProfileSize} 铝型材...`);
-
-      try {
-        const params = `${selectedProfileSize}|${length}|${unit}`;
-        window.location = `skp:create_profile@${params}`;
-
-        setTimeout(() => {
-          setProcessing(false);
-          updateStatus(`创建完成`);
-        }, 1500);
-      } catch (error) {
-        setProcessing(false);
-        updateStatus(`创建失败`);
-      }
+    function quickCreateProfile() {
+      updateStatus(`快速创建 ${state.profileSize}...`);
+      callRuby('quick_create_profile', `${state.profileSize}`);
     }
 
     function alignProfiles() {
-      // const reference = document.getElementById('align-reference').value;
       const snapCopy = document.getElementById('snap-copy').checked;
-      setProcessing(true);
-      updateStatus(`对齐操作...`);
-
-      try {
-        // window.location = `skp:align_profiles@${selectedAlign}|${reference}`;
-        window.location = `skp:snap_to_face_tool@${snapCopy}`;
-        setTimeout(() => {
-          setProcessing(false);
-          updateStatus(`对齐完成`);
-        }, 1000);
-      } catch (error) {
-        setProcessing(false);
-        updateStatus(`对齐失败`);
-      }
+      updateStatus('正在对齐...');
+      callRuby('snap_to_face_tool', `${snapCopy}`);
     }
 
-    function rotateProfiles() {
-      const direction = event.currentTarget.dataset.direction;
-      setProcessing(true);
-      updateStatus(`对齐操作...`);
-
-      try {
-        window.location = `skp:rotate_tool@${direction}`;
-        setTimeout(() => {
-          setProcessing(false);
-          updateStatus(`旋转完成`);
-        }, 1000);
-      } catch (error) {
-        setProcessing(false);
-        updateStatus(`旋转失败`);
-      }
+    function rotateProfiles(direction) {
+      updateStatus('正在旋转...');
+      callRuby('rotate_tool', `${direction}`);
     }
 
-
-    function moveProfiles() {
-      const x = document.getElementById('move-x').value || 0;
-      const y = document.getElementById('move-y').value || 0;
-      const z = document.getElementById('move-z').value || 0;
-      const unit = document.getElementById('move-unit').value;
-
-      setProcessing(true);
-      updateStatus(`移动对象...`);
-
-      try {
-        window.location = `skp:move_profiles@${x}|${y}|${z}|${unit}`;
-
-        setTimeout(() => {
-          setProcessing(false);
-          updateStatus(`移动完成`);
-        }, 1000);
-      } catch (error) {
-        setProcessing(false);
-        updateStatus(`移动失败`);
-      }
-    }
-
-    // function rotateProfiles() {
-    //   const angle = document.getElementById('rotate-angle').value || 90;
-    //   const direction = document.getElementById('rotate-direction').value;
-
-    //   setProcessing(true);
-    //   updateStatus(`旋转对象...`);
-
-    //   try {
-    //     window.location = `skp:rotate_profiles@${angle}|${direction}|${selectedAxis}`;
-
-    //     setTimeout(() => {
-    //       setProcessing(false);
-    //       updateStatus(`旋转完成`);
-    //     }, 1000);
-    //   } catch (error) {
-    //     setProcessing(false);
-    //     updateStatus(`旋转失败`);
-    //   }
-    // }
-
-    function flipProfiles() {
-      const copy = document.getElementById('flip-copy').checked;
-
-      setProcessing(true);
-      updateStatus(`翻转对象...`);
-
-      try {
-        window.location = `skp:flip_profiles@${selectedAxis}|${copy}`;
-
-        setTimeout(() => {
-          setProcessing(false);
-          updateStatus(`翻转完成`);
-        }, 1000);
-      } catch (error) {
-        setProcessing(false);
-        updateStatus(`翻转失败`);
-      }
-    }
-
-    function stretchProfiles() {
-      const length = document.getElementById('stretch-length').value || 500;
-      const direction = document.getElementById('stretch-direction').value;
-      const keepConnections = document.getElementById('stretch-keep-connections').checked;
-
-      setProcessing(true);
-      updateStatus(`拉伸对象...`);
-
-      try {
-        window.location = `skp:stretch_profiles@${length}|${direction}|${keepConnections}`;
-
-        setTimeout(() => {
-          setProcessing(false);
-          updateStatus(`拉伸完成`);
-        }, 1000);
-      } catch (error) {
-        setProcessing(false);
-        updateStatus(`拉伸失败`);
-      }
-    }
-
-    function createHoles() {
-      const diameter = document.getElementById('hole-diameter').value || 8;
-      const depth = document.getElementById('hole-depth').value || 10;
-
-      setProcessing(true);
-      updateStatus(`创建孔...`);
-
-      try {
-        window.location = `skp:create_holes@${diameter}|${depth}|${selectedHoleType}`;
-
-        setTimeout(() => {
-          setProcessing(false);
-          updateStatus(`开孔完成`);
-        }, 1000);
-      } catch (error) {
-        setProcessing(false);
-        updateStatus(`开孔失败`);
-      }
-    }
-
-    function addCorners() {
-      const size = document.getElementById('corner-size').value;
-      const thickness = document.getElementById('corner-thickness').value;
-
-      setProcessing(true);
-      updateStatus(`添加角码...`);
-
-      try {
-        window.location = `skp:add_corners@${size}|${thickness}|${selectedCornerType}`;
-
-        setTimeout(() => {
-          setProcessing(false);
-          updateStatus(`角码添加完成`);
-        }, 1000);
-      } catch (error) {
-        setProcessing(false);
-        updateStatus(`添加失败`);
-      }
-    }
-
-    // 初始化
-    document.addEventListener('DOMContentLoaded', initialize);
+    // Start
+    document.addEventListener('DOMContentLoaded', init);
   </script>
 </body>
 
