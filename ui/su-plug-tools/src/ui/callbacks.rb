@@ -25,7 +25,6 @@ module YOOOOOO
             size, length, unit = params.split("|")
             puts "收到 create_profile 回调，参数: #{size}, #{length}, #{unit}"
             # 调用核心功能模块
-            # Core.create_profile_tool(size, length.to_f, unit)
             Core::CreateProfileTool.new(size, length.to_f, unit)
           end
           @callback_count = callback_count + 1
@@ -64,20 +63,6 @@ module YOOOOOO
           timestamp = Time.now.strftime("%H:%M:%S")
           puts "[#{timestamp}] 回调 #{callback_name}: #{message}"
         end
-
-        # # 获取所有已注册的回调名称列表（用于调试）
-        # def registered_callbacks
-        #   [
-        #     "create_profile",
-        #     "align_profiles",
-        #     "move_profiles",
-        #     "rotate_profiles",
-        #     "flip_profiles",
-        #     "stretch_profiles",
-        #     "create_holes",
-        #     "add_corners",
-        #   ]
-        # end
       end
     end
   end

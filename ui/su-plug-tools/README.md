@@ -78,4 +78,4 @@
 * https://github.com/SketchUp/sketchup-ruby-api-tutorials/wiki
 
 ## 软连接
- * 将!external.rb.bak修改为!external.rb并复制到~/Library/Application Support/SketchUp 2024/SketchUp/Plugins目录下
+ * 将项目根目录/资源/!external.rb.bak修改为!external.rb并复制到~/Library/Application Support/SketchUp 2024/SketchUp/Plugins目录下
