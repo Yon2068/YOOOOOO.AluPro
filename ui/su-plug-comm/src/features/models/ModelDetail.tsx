@@ -212,13 +212,13 @@ export default function ModelDetail() {
 
         {/* Basic Info */}
         <div className="space-y-3">
-          <div className="flex items-start justify-between">
-            <h2 className="text-xl font-bold leading-tight">{model.title}</h2>
-            <div className="flex flex-col items-end">
+          <div className="flex items-start justify-between gap-4">
+            <h2 className="text-xl font-bold leading-tight flex-1">{model.title}</h2>
+            <div className="flex flex-col items-end shrink-0">
                {model.isFree && model.price && model.price > 0 ? (
                  <div className="flex flex-col items-end">
                    <div className="flex items-center gap-2">
-                     <Badge variant="outline" className="text-[10px] text-green-600 border-green-200 bg-green-50">限时免费</Badge>
+                     <Badge variant="outline" className="text-[10px] text-green-600 border-green-200 bg-green-50 whitespace-nowrap">限时免费</Badge>
                      <span className="text-sm text-muted-foreground line-through">¥ {model.price}</span>
                    </div>
                    <span className="text-2xl font-bold text-green-600">Free</span>
