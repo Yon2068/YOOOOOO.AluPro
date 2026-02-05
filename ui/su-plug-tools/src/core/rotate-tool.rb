@@ -1,3 +1,6 @@
+require_relative "../utils/rotate"
+require_relative "../utils/draw"
+
 module YOOOOOO
   module AluPro
     module Core

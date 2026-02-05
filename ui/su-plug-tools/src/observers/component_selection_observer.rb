@@ -1,4 +1,5 @@
 require_relative "../utils/dimensions"
+require_relative "../ui/dialog_handler"
 
 module YOOOOOO
   module AluPro

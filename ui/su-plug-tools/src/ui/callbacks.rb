@@ -1,4 +1,9 @@
 # src/yoooo_aluminum/ui/callbacks.rb
+require_relative "../core/quick-create-profile-tool"
+require_relative "../core/create-profile-tool"
+require_relative "../core/snap-to-face-tool"
+require_relative "../core/rotate-tool"
+
 module YOOOOOO
   module AluPro
     module UI
