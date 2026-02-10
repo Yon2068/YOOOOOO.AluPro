@@ -53,6 +53,47 @@ module YOOOOOO
           end
           @callback_count = callback_count + 1
 
+          dialog.add_action_callback("get_local_version") do |_dialog, _params|
+            version = YOOOOOO::AluPro.extension_version.to_s
+            safe_version = version.gsub("'", "\\\\'")
+            script = "if(window.onLocalVersion) { window.onLocalVersion('#{safe_version}'); }"
+            dialog.execute_script(script)
+          end
+          @callback_count = callback_count + 1
+
+          # 检查更新
+          dialog.add_action_callback("check_for_update") do |_dialog, _params|
+            puts "收到 check_for_update 回调"
+            # 在非阻塞线程中运行，避免卡顿UI (注意: SketchUp Ruby是单线程的，这里只是逻辑分离)
+            # 实际请求会阻塞，但在回调里通常可以接受
+            begin
+              result = Updater.check_for_update(YOOOOOO::AluPro.extension_version)
+              json_result = result ? result.to_json : "null"
+              script = "if(window.onUpdateCheckResult) { window.onUpdateCheckResult(#{json_result}); }"
+              dialog.execute_script(script)
+            rescue => e
+              puts "Update check error: #{e.message}"
+            end
+          end
+          @callback_count = callback_count + 1
+
+          # 执行更新
+          dialog.add_action_callback("perform_update") do |_dialog, download_url|
+            puts "收到 perform_update 回调: #{download_url}"
+            dialog.execute_script("if(window.onUpdateStatus) { window.onUpdateStatus('正在下载更新...', true); }")
+
+            # 使用 timer 避免阻塞 UI 渲染
+            ::UI.start_timer(0.1, false) {
+              result = Updater.perform_update(download_url)
+              unless result[:success]
+                msg = result[:message].gsub("'", "\\'")
+                dialog.execute_script("alert('更新失败: #{msg}');")
+                dialog.execute_script("if(window.onUpdateStatus) { window.onUpdateStatus('更新失败', false); }")
+              end
+            }
+          end
+          @callback_count = callback_count + 1
+
           puts "已注册 #{callback_count} 个回调函数"
         end
 

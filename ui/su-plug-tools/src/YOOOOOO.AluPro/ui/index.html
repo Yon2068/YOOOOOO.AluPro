@@ -393,6 +393,146 @@
     ::-webkit-scrollbar-thumb:hover {
       background: rgba(255, 255, 255, 0.2);
     }
+
+    /* Update Modal & Badge */
+    .update-btn {
+      background: rgba(245, 158, 11, 0.15);
+      border: 1px solid rgba(245, 158, 11, 0.4);
+      color: #f59e0b;
+      padding: 6px 12px;
+      border-radius: var(--radius-sm);
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+      display: none; /* Hidden by default */
+      margin-right: 12px;
+      transition: all 0.2s;
+      letter-spacing: 0.5px;
+    }
+
+    .update-btn:hover {
+      background: rgba(245, 158, 11, 0.25);
+      border-color: #f59e0b;
+      transform: translateY(-1px);
+    }
+
+    .update-btn::before {
+      content: '●';
+      margin-right: 6px;
+      font-size: 8px;
+      animation: pulse-dot 1.5s infinite;
+    }
+
+    @keyframes pulse-dot {
+      0% { opacity: 0.5; }
+      50% { opacity: 1; }
+      100% { opacity: 0.5; }
+    }
+
+    .modal-overlay {
+      position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(15, 17, 21, 0.85);
+      backdrop-filter: blur(8px);
+      display: flex; align-items: center; justify-content: center;
+      z-index: 1000;
+      opacity: 0; pointer-events: none;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .modal-overlay.active { opacity: 1; pointer-events: auto; }
+
+    .modal-content {
+      background: #1e222b;
+      padding: 32px;
+      border-radius: 16px;
+      width: 360px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+      text-align: center;
+      transform: scale(0.95);
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .modal-overlay.active .modal-content {
+      transform: scale(1);
+    }
+
+    .modal-title {
+      color: var(--text-main);
+      margin-bottom: 8px;
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+    }
+
+    .modal-version {
+      display: inline-block;
+      padding: 4px 10px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 20px;
+      color: var(--accent-color);
+      font-size: 12px;
+      font-weight: 600;
+      margin-bottom: 20px;
+    }
+
+    .modal-body {
+      color: var(--text-muted);
+      margin-bottom: 32px;
+      font-size: 14px;
+      line-height: 1.6;
+      text-align: left;
+      background: rgba(0, 0, 0, 0.2);
+      padding: 16px;
+      border-radius: 8px;
+    }
+
+    .modal-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .modal-btn {
+      padding: 12px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s;
+    }
+
+    .modal-btn.secondary {
+      background: transparent;
+      border: 1px solid var(--border-color);
+      color: var(--text-muted);
+    }
+
+    .modal-btn.secondary:hover {
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text-main);
+    }
+
+    .modal-btn.primary {
+      background: var(--primary-color);
+      color: white;
+      box-shadow: 0 4px 12px rgba(58, 134, 255, 0.3);
+    }
+
+    .modal-btn.primary:hover {
+      background: var(--primary-hover);
+      transform: translateY(-1px);
+    }
+
+    .update-progress {
+        margin-top: 24px;
+        height: 6px;
+        background: rgba(255,255,255,0.05);
+        border-radius: 3px;
+        overflow: hidden;
+        display: none;
+    }
+    .update-bar { height: 100%; background: var(--primary-color); width: 0%; transition: width 0.3s; border-radius: 3px; }
   </style>
 </head>
 
@@ -402,7 +542,10 @@
       <div class="brand-logo">Y</div>
       <span>AluPro Tools</span>
     </div>
-    <div class="version">v1.0</div>
+    <div style="display:flex; align-items:center;">
+      <button id="update-btn" class="update-btn">发现新版本</button>
+      <div id="local-version" class="version">v--</div>
+    </div>
   </header>
 
   <div class="content-area">
@@ -491,7 +634,100 @@
     </div>
   </div>
 
+  <!-- Update Modal -->
+  <div id="update-modal" class="modal-overlay">
+    <div class="modal-content">
+      <h3 class="modal-title">发现新版本</h3>
+      <div id="modal-version-tag" class="modal-version">v1.0.1</div>
+
+      <div class="modal-body" id="update-desc">
+        正在检查更新...
+      </div>
+
+      <div class="modal-actions">
+        <button class="modal-btn secondary" id="update-cancel-btn">稍后再说</button>
+        <button class="modal-btn primary" id="update-confirm-btn">立即更新</button>
+      </div>
+
+      <div class="update-progress">
+        <div class="update-bar" id="update-bar"></div>
+      </div>
+    </div>
+  </div>
+
   <script>
+    // Update System
+    let updateInfo = null;
+
+    // Call Ruby to check update
+    function checkUpdate() {
+      if(window.sketchup && window.sketchup.check_for_update) {
+        window.sketchup.check_for_update();
+      } else {
+        window.location = 'skp:check_for_update';
+      }
+    }
+
+    // Callback from Ruby
+    window.onUpdateCheckResult = function(result) {
+      console.log("Update check result:", result);
+      if(!result) return;
+
+      updateInfo = result;
+
+      if (result.force_update) {
+        showUpdateModal(true);
+      } else if (result.has_update) {
+        document.getElementById('update-btn').style.display = 'block';
+      }
+    };
+
+    window.onUpdateStatus = function(status, isLoading) {
+      document.getElementById('status-text').innerText = status;
+      if(isLoading) {
+        document.querySelector('.update-progress').style.display = 'block';
+        document.querySelector('.modal-actions').style.display = 'none'; // Hide buttons during update
+        let bar = document.getElementById('update-bar');
+        let width = 0;
+        let interval = setInterval(() => {
+          width += Math.random() * 5;
+          if(width > 95) clearInterval(interval);
+          bar.style.width = width + '%';
+        }, 200);
+      } else {
+         // document.querySelector('.update-progress').style.display = 'none';
+      }
+    };
+
+    function showUpdateModal(isForce) {
+      const modal = document.getElementById('update-modal');
+      const desc = document.getElementById('update-desc');
+      const versionTag = document.getElementById('modal-version-tag');
+      const cancelBtn = document.getElementById('update-cancel-btn');
+
+      versionTag.innerText = `v${updateInfo.remote_version}`;
+      desc.innerHTML = updateInfo.desc || '包含性能优化与稳定性提升。';
+
+      if(isForce) {
+        cancelBtn.style.display = 'none';
+        document.querySelector('.modal-actions').style.gridTemplateColumns = '1fr';
+        desc.innerHTML += '<br><br><span style="color:#ef4444; font-weight:600;">⚠️ 当前版本过旧，必须更新。</span>';
+      } else {
+        cancelBtn.style.display = 'block';
+        document.querySelector('.modal-actions').style.gridTemplateColumns = '1fr 1fr';
+      }
+
+      modal.classList.add('active');
+    }
+
+    function requestLocalVersion() {
+      if(window.sketchup && window.sketchup.get_local_version) {
+        window.sketchup.get_local_version();
+      } else {
+        window.location = 'skp:get_local_version';
+      }
+    }
+
     // State
     let state = {
       profileSize: '2020',
@@ -509,10 +745,33 @@
     function init() {
       bindEvents();
       updateStatus(`系统就绪 - 当前规格: ${state.profileSize}`);
+
+      requestLocalVersion();
+      setTimeout(checkUpdate, 1000);
     }
 
     // Event Binding
     function bindEvents() {
+      // Update Events
+      const updateBtn = document.getElementById('update-btn');
+      if(updateBtn) updateBtn.addEventListener('click', () => showUpdateModal(false));
+
+      const cancelBtn = document.getElementById('update-cancel-btn');
+      if(cancelBtn) cancelBtn.addEventListener('click', () => {
+        document.getElementById('update-modal').classList.remove('active');
+      });
+
+      const confirmBtn = document.getElementById('update-confirm-btn');
+      if(confirmBtn) confirmBtn.addEventListener('click', () => {
+        if(updateInfo && updateInfo.download_url) {
+           if(window.sketchup && window.sketchup.perform_update) {
+             window.sketchup.perform_update(updateInfo.download_url);
+           } else {
+             window.location = `skp:perform_update@${updateInfo.download_url}`;
+           }
+        }
+      });
+
       // Spec Selection
       elements.specBtns.forEach(btn => {
         btn.addEventListener('click', () => {
@@ -527,7 +786,7 @@
       document.getElementById('create-btn').addEventListener('click', createProfile);
       document.getElementById('quick-create-btn').addEventListener('click', quickCreateProfile);
       document.getElementById('align-btn').addEventListener('click', alignProfiles);
-      
+
       document.querySelectorAll('.rotate-btn').forEach(btn => {
         btn.addEventListener('click', (e) => rotateProfiles(e.currentTarget.dataset.direction));
       });
@@ -588,6 +847,13 @@
 
     // Start
     document.addEventListener('DOMContentLoaded', init);
+
+    window.onLocalVersion = function(version) {
+      const el = document.getElementById('local-version');
+      if (el) {
+        el.textContent = `v${version}`;
+      }
+    };
   </script>
 </body>
 
