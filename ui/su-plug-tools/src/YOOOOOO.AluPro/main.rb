@@ -11,20 +11,6 @@ require_relative "updater"
 module YOOOOOO
   module AluPro
     PROJECT_ROOT = File.dirname(__FILE__).gsub(%r{//}) { "/" }.freeze
-    VERSION = "1.0.0"
-
-    def self.extension_version
-      return EXT_VERSION if defined?(EXT_VERSION)
-
-      entry_file = File.expand_path("../YOOOOOO.AluPro.rb", PROJECT_ROOT)
-      if File.exist?(entry_file)
-        content = File.read(entry_file)
-        match = content.match(/EXT_VERSION\s*=\s*"([^"]+)"/)
-        return match[1] if match
-      end
-
-      VERSION
-    end
 
     def self.setup_observers
       @selection_observer = Observers::ComponentSelectionObserver.new

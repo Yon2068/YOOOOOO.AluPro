@@ -54,7 +54,7 @@ module YOOOOOO
           @callback_count = callback_count + 1
 
           dialog.add_action_callback("get_local_version") do |_dialog, _params|
-            version = YOOOOOO::AluPro.extension_version.to_s
+            version = YOOOOOO::AluPro::EXT_VERSION.to_s
             safe_version = version.gsub("'", "\\\\'")
             script = "if(window.onLocalVersion) { window.onLocalVersion('#{safe_version}'); }"
             dialog.execute_script(script)
@@ -67,7 +67,7 @@ module YOOOOOO
             # 在非阻塞线程中运行，避免卡顿UI (注意: SketchUp Ruby是单线程的，这里只是逻辑分离)
             # 实际请求会阻塞，但在回调里通常可以接受
             begin
-              result = Updater.check_for_update(YOOOOOO::AluPro.extension_version)
+              result = Updater.check_for_update(YOOOOOO::AluPro::EXT_VERSION)
               json_result = result ? result.to_json : "null"
               script = "if(window.onUpdateCheckResult) { window.onUpdateCheckResult(#{json_result}); }"
               dialog.execute_script(script)

@@ -63,14 +63,15 @@ module YOOOOOO
           return { success: false, message: "Download failed: #{e.message}" }
         end
 
-        # 2. 安装并热重载
         begin
-          # SketchUp 安装 API
           Sketchup.install_from_archive(target_path, false)
-
-          # 3. 执行热重载逻辑
-          reload_extension
-
+          reload_extension(reopen: false)
+          was_visible = @was_visible
+          @was_visible = nil
+          result = ::UI.messagebox("AluPro更新成功，点击确定重新打开插件", MB_OK)
+          if result == IDOK && was_visible
+            YOOOOOO::AluPro::UI::DialogHandler.show_dialog
+          end
           return { success: true, message: "Update successful!" }
         rescue => e
           return { success: false, message: "Install failed: #{e.message}" }
@@ -78,9 +79,7 @@ module YOOOOOO
       end
 
       # 核心热重载逻辑
-      def reload_extension
-        # A. 清理旧环境
-        # 1. 关闭UI
+      def reload_extension(reopen: true)
         if defined?(YOOOOOO::AluPro::UI::DialogHandler)
           dialog = YOOOOOO::AluPro::UI::DialogHandler.current_dialog
           if dialog && dialog.visible?
@@ -89,28 +88,30 @@ module YOOOOOO
           end
         end
 
-        # 2. 移除观察者
         if defined?(YOOOOOO::AluPro.teardown_observers)
           YOOOOOO::AluPro.teardown_observers
         end
 
-        # B. 重新加载代码
-        # 注意：按依赖顺序加载
         project_root = YOOOOOO::AluPro::PROJECT_ROOT
+        entry_file = File.expand_path("../YOOOOOO.AluPro.rb", project_root)
 
-        # 重新加载核心文件
+        if File.exist?(entry_file)
+          [:EXT_VERSION, :EXT_TITLE, :EXT_NAME, :EXT_DESCRIPTION].each do |const_name|
+            if YOOOOOO::AluPro.const_defined?(const_name)
+              YOOOOOO::AluPro.send(:remove_const, const_name)
+            end
+          end
+          load entry_file
+        end
+
+        $LOADED_FEATURES.reject! { |feature| feature.start_with?(project_root) }
+
+        rb_files = Dir.glob(File.join(project_root, "**", "*.rb")).sort
+        rb_files.reject! { |file| File.basename(file) == "main.rb" }
+        rb_files.each { |file| load file }
         load File.join(project_root, "main.rb")
-        load File.join(project_root, "updater.rb")
 
-        # 重新加载UI相关
-        load File.join(project_root, "ui", "callbacks.rb")
-        load File.join(project_root, "ui", "dialog_handler.rb")
-
-        # 重新加载观察者
-        load File.join(project_root, "observers", "component_selection_observer.rb")
-
-        # C. 恢复环境
-        if @was_visible
+        if reopen && @was_visible
           YOOOOOO::AluPro::UI::DialogHandler.show_dialog
         end
       end
