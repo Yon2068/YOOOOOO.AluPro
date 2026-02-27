@@ -1,0 +1,24 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.2.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YOOOOOO.AluPro.Api", "YOOOOOO.AluPro.Api.csproj", "{FD08316B-5C70-0838-CE10-B1901191B26E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FD08316B-5C70-0838-CE10-B1901191B26E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FD08316B-5C70-0838-CE10-B1901191B26E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FD08316B-5C70-0838-CE10-B1901191B26E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FD08316B-5C70-0838-CE10-B1901191B26E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {85A17338-8BFB-4B23-8425-636B656AFE8D}
+	EndGlobalSection
+EndGlobal
